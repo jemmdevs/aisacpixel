@@ -136,19 +136,54 @@ const {
       const navSection = document.querySelector('.nav-section');
       const welcomeSection = document.querySelector('.c-welcome');
       const mediaHolder = document.querySelector('.c-welcome .media-holder');
+      const mediaWrap = document.querySelector('.c-welcome .media-wrap');
       
       // Threshold: when header should transform (in pixels from top)
       const SCROLL_THRESHOLD = 100;
       
-      // Sticky position for media holder (VIDEO's own sticky point - below header)
-      // This must match the CSS: top: calc(4.5rem/5rem + var(--g-gap) * 2)
-      const getStickyTop = () => {
-        const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-        const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--g-gap')) || rem;
-        // Desktop: 5rem, Mobile: 4.5rem
-        const baseHeight = window.innerWidth >= 1024 ? (5 * rem) : (4.5 * rem);
-        return baseHeight + (gap * 2);
+      // ========================================
+      // VIDEO STICKY SIMULATION
+      // We manually control the position with JavaScript
+      // This avoids issues with Lenis and position: sticky
+      // ========================================
+      let videoInitialTop = 0;       // Distance from document top to video
+      let videoStickyPoint = 0;      // Viewport position where video should "stick"
+      let videoOriginalWidth = 0;    // Original width for fixed positioning
+      let videoOriginalLeft = 0;     // Original left for fixed positioning
+      let isVideoFixed = false;
+      
+      const initVideoPosition = () => {
+        if (!mediaHolder || !mediaWrap) return;
+        
+        // Remove fixed class first to get accurate measurements
+        mediaHolder.classList.remove('-fixed');
+        
+        // Get the video's position relative to the document
+        const rect = mediaHolder.getBoundingClientRect();
+        const scrollY = window.scrollY;
+        
+        videoInitialTop = rect.top + scrollY;  // Position from document top
+        videoStickyPoint = rect.top;           // Initial viewport position = sticky point
+        videoOriginalWidth = rect.width;
+        videoOriginalLeft = rect.left;
+        
+        console.log('Video init:', {
+          initialTop: videoInitialTop,
+          stickyPoint: videoStickyPoint,
+          width: videoOriginalWidth,
+          left: videoOriginalLeft
+        });
       };
+      
+      // Initialize on load
+      initVideoPosition();
+      
+      // Recalculate on resize
+      window.addEventListener('resize', () => {
+        if (!isVideoFixed) {
+          initVideoPosition();
+        }
+      });
       
       // Track scroll state
       let isScrolled = false;
@@ -177,43 +212,54 @@ const {
         }
         
         // ========================================
-        // 2. VIDEO CLOSING EFFECT
-        // The container CONTRACTS from bottom while staying at sticky position
-        // It never goes above the navbar (sticky ceiling)
+        // 2. VIDEO STICKY SIMULATION + CLOSING EFFECT
+        // Manually control position to avoid Lenis conflicts
         // ========================================
-        if (welcomeSection && mediaHolder) {
-          const stickyTop = getStickyTop();
+        if (welcomeSection && mediaHolder && mediaWrap && videoStickyPoint > 0) {
+          // Calculate where the video WOULD be without fixing
+          const whereVideoWouldBe = videoInitialTop - scrollY;
           
-          // Get the visual section that contains the video
-          const visualSection = welcomeSection.querySelector('.visual');
-          if (!visualSection) return;
-          
-          const visualRect = visualSection.getBoundingClientRect();
-          
-          // Get the original height of the video (aspect ratio based)
-          const mediaWidth = mediaHolder.offsetWidth;
+          // Get original height based on aspect ratio
+          const mediaWidth = videoOriginalWidth || mediaHolder.offsetWidth;
           const aspectRatio = window.innerWidth >= 1024 ? (12/21) : (9/16);
           const originalHeight = mediaWidth * aspectRatio;
           
-          // Store original height for calculations
+          // Store original height
           if (!mediaHolder.dataset.originalHeight) {
             mediaHolder.dataset.originalHeight = originalHeight.toString();
           }
           const storedHeight = parseFloat(mediaHolder.dataset.originalHeight);
           
+          // Should the video be fixed?
+          // Yes, if it would scroll above its sticky point
+          const shouldBeFixed = whereVideoWouldBe < videoStickyPoint;
+          
+          if (shouldBeFixed && !isVideoFixed) {
+            // Switch to fixed positioning
+            isVideoFixed = true;
+            mediaHolder.classList.add('-fixed');
+            mediaHolder.style.top = `${videoStickyPoint}px`;
+            mediaHolder.style.left = `${videoOriginalLeft}px`;
+            mediaHolder.style.width = `${videoOriginalWidth}px`;
+            
+            // Add placeholder height to parent to maintain layout
+            mediaWrap.style.minHeight = `${storedHeight}px`;
+          } else if (!shouldBeFixed && isVideoFixed) {
+            // Switch back to relative positioning
+            isVideoFixed = false;
+            mediaHolder.classList.remove('-fixed');
+            mediaHolder.style.top = '';
+            mediaHolder.style.left = '';
+            mediaHolder.style.width = '';
+            mediaWrap.style.minHeight = '';
+          }
+          
+          // Calculate closing progress
           let progress = 0;
           
-          // Calculate based on where the visual section is
-          // The sticky kicks in when visual.top + padding reaches stickyTop
-          const paddingTop = parseFloat(getComputedStyle(visualSection).paddingTop) || 0;
-          const triggerPoint = visualRect.top + paddingTop;
-          
-          if (triggerPoint < stickyTop) {
-            // We're past the sticky trigger - video starts contracting
-            // Distance scrolled past the trigger point
-            const distancePastTrigger = stickyTop - triggerPoint;
-            
-            // Progress = how much we've scrolled / original video height
+          if (shouldBeFixed) {
+            // How much have we scrolled past the trigger point?
+            const distancePastTrigger = videoStickyPoint - whereVideoWouldBe;
             progress = distancePastTrigger / storedHeight;
           }
           
@@ -221,10 +267,9 @@ const {
           progress = Math.max(0, Math.min(1, progress));
           
           // Calculate new height based on progress
-          // Height goes from 100% to 0% of original
           const newHeight = storedHeight * (1 - progress);
           
-          // Apply the height directly
+          // Apply the height
           mediaHolder.style.maxHeight = `${newHeight}px`;
           mediaHolder.style.setProperty('--progress', progress.toFixed(4));
         }

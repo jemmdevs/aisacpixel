@@ -156,32 +156,30 @@ const {
 
   .media-holder {
     --progress: 0;
-    --video-height: 0px; /* Set by JS */
     width: 100%;
     /* 
-     * Sticky positioning - VIDEO'S OWN sticky point
-     * This is where the video naturally sits (below header)
-     * top = header height + gaps
-     * The video stays HERE - never goes above this line
+     * Position is controlled by JavaScript
+     * Initially relative, then fixed when scrolling
      */
-    position: sticky;
-    top: calc(4.5rem + var(--g-gap) * 2);
+    position: relative;
     transform: translateZ(0);
     
     /* 
      * CONTRACTING EFFECT
-     * Container height shrinks based on progress
-     * Uses max-height to limit visible area
      * overflow: hidden clips the content from bottom
      */
     overflow: hidden;
     border-radius: 1.5rem;
   }
 
+  /* When JS adds -fixed class, video stays in place */
+  .media-holder.-fixed {
+    position: fixed;
+    z-index: 21;
+  }
+
   @media (min-width: 1024px) {
     .media-holder {
-      /* Desktop: header is taller, so sticky point is lower */
-      top: calc(5rem + var(--g-gap) * 2);
       border-radius: 2rem;
     }
   }
