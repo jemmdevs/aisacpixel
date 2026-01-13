@@ -119,12 +119,145 @@ const {
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', (e) => {
           e.preventDefault();
-          const target = document.querySelector((anchor as HTMLAnchorElement).getAttribute('href')!);
+          const target = document.querySelector(anchor.getAttribute('href'));
           if (target) {
-            lenis.scrollTo(target as HTMLElement);
+            lenis.scrollTo(target);
           }
         });
       });
+
+      // ========================================
+      // SCROLL-BASED ANIMATIONS
+      // ========================================
+      
+      // Elements
+      const header = document.querySelector('.header');
+      const logoSection = document.querySelector('.logo-section');
+      const navSection = document.querySelector('.nav-section');
+      const welcomeSection = document.querySelector('.c-welcome');
+      const mediaHolder = document.querySelector('.c-welcome .media-holder');
+      
+      // Threshold: when header should transform (in pixels from top)
+      const SCROLL_THRESHOLD = 100;
+      
+      // Sticky position for media holder (VIDEO's own sticky point - below header)
+      // This must match the CSS: top: calc(4.5rem/5rem + var(--g-gap) * 2)
+      const getStickyTop = () => {
+        const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--g-gap')) || rem;
+        // Desktop: 5rem, Mobile: 4.5rem
+        const baseHeight = window.innerWidth >= 1024 ? (5 * rem) : (4.5 * rem);
+        return baseHeight + (gap * 2);
+      };
+      
+      // Track scroll state
+      let isScrolled = false;
+      let lastScrollY = 0;
+      
+      // Update scroll-based animations
+      function updateScrollAnimations() {
+        const scrollY = lenis.scroll || window.scrollY;
+        
+        // ========================================
+        // 1. HEADER TRANSFORMATION
+        // When scrolled past threshold, header goes to "hold" state
+        // ========================================
+        if (scrollY > SCROLL_THRESHOLD && !isScrolled) {
+          isScrolled = true;
+          document.documentElement.classList.add('-scrolled');
+          header?.classList.add('-hold');
+          logoSection?.classList.add('-minimized');
+          navSection?.classList.add('-hold');
+        } else if (scrollY <= SCROLL_THRESHOLD && isScrolled) {
+          isScrolled = false;
+          document.documentElement.classList.remove('-scrolled');
+          header?.classList.remove('-hold');
+          logoSection?.classList.remove('-minimized');
+          navSection?.classList.remove('-hold');
+        }
+        
+        // ========================================
+        // 2. VIDEO CLOSING EFFECT
+        // The container CONTRACTS from bottom while staying at sticky position
+        // It never goes above the navbar (sticky ceiling)
+        // ========================================
+        if (welcomeSection && mediaHolder) {
+          const stickyTop = getStickyTop();
+          
+          // Get the visual section that contains the video
+          const visualSection = welcomeSection.querySelector('.visual');
+          if (!visualSection) return;
+          
+          const visualRect = visualSection.getBoundingClientRect();
+          
+          // Get the original height of the video (aspect ratio based)
+          const mediaWidth = mediaHolder.offsetWidth;
+          const aspectRatio = window.innerWidth >= 1024 ? (12/21) : (9/16);
+          const originalHeight = mediaWidth * aspectRatio;
+          
+          // Store original height for calculations
+          if (!mediaHolder.dataset.originalHeight) {
+            mediaHolder.dataset.originalHeight = originalHeight.toString();
+          }
+          const storedHeight = parseFloat(mediaHolder.dataset.originalHeight);
+          
+          let progress = 0;
+          
+          // Calculate based on where the visual section is
+          // The sticky kicks in when visual.top + padding reaches stickyTop
+          const paddingTop = parseFloat(getComputedStyle(visualSection).paddingTop) || 0;
+          const triggerPoint = visualRect.top + paddingTop;
+          
+          if (triggerPoint < stickyTop) {
+            // We're past the sticky trigger - video starts contracting
+            // Distance scrolled past the trigger point
+            const distancePastTrigger = stickyTop - triggerPoint;
+            
+            // Progress = how much we've scrolled / original video height
+            progress = distancePastTrigger / storedHeight;
+          }
+          
+          // Clamp progress between 0 and 1
+          progress = Math.max(0, Math.min(1, progress));
+          
+          // Calculate new height based on progress
+          // Height goes from 100% to 0% of original
+          const newHeight = storedHeight * (1 - progress);
+          
+          // Apply the height directly
+          mediaHolder.style.maxHeight = `${newHeight}px`;
+          mediaHolder.style.setProperty('--progress', progress.toFixed(4));
+        }
+        
+        lastScrollY = scrollY;
+      }
+      
+      // Listen to Lenis scroll events
+      lenis.on('scroll', updateScrollAnimations);
+      
+      // Initial call
+      updateScrollAnimations();
+      
+      // ========================================
+      // 3. NAVBAR HOVER EFFECT
+      // When in -hold state, hovering navbar shows container
+      // ========================================
+      if (navSection) {
+        navSection.addEventListener('mouseenter', () => {
+          if (navSection.classList.contains('-hold')) {
+            navSection.classList.add('-hovered');
+          }
+        });
+        
+        navSection.addEventListener('mouseleave', () => {
+          navSection.classList.remove('-hovered');
+        });
+      }
+      
+      // Mark as ready for animations
+      setTimeout(() => {
+        document.documentElement.classList.add('-ready', '-loaded');
+      }, 100);
     </script>
   </body>
 </html>

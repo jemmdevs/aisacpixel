@@ -249,4 +249,105 @@
     height: var(--m);
     background-color: var(--c-grey-dark);
   }
+
+  /* ========================================
+     SCROLL-BASED ANIMATIONS
+     Header transforms when scrolled past threshold
+     ======================================== */
+
+  /* LOGO SECTION - Transition to minimized state */
+  .logo-wrap .bg {
+    transition: transform 0.6s var(--f-cubic);
+  }
+
+  .logo-link {
+    transition: padding 0.6s var(--f-cubic), opacity 0.3s var(--f-cubic);
+  }
+
+  .logo-text,
+  .agency-label,
+  .logo-icon {
+    transition: transform 0.6s var(--f-cubic), opacity 0.4s var(--f-cubic);
+  }
+
+  /* When scrolled - Logo minimizes */
+  .logo-section.-minimized .logo-wrap .bg {
+    transform: translateY(-100%);
+  }
+
+  .logo-section.-minimized .logo-link {
+    padding: 0.5rem calc(var(--g-gap) * 2);
+  }
+
+  .logo-section.-minimized .agency-label,
+  .logo-section.-minimized .logo-icon,
+  .logo-section.-minimized .sub-text {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+
+  .logo-section.-minimized .brand-name {
+    font-size: var(--m);
+  }
+
+  /* ========================================
+     NAVBAR - Hold state (no container)
+     ======================================== */
+  .nav-wrap .bg {
+    transition: transform 0.6s var(--f-cubic), opacity 0.4s var(--f-cubic);
+  }
+
+  .nav-link,
+  .nav-link label {
+    transition: color 0.3s var(--f-cubic), opacity 0.3s var(--f-cubic);
+  }
+
+  /* When scrolled - Navbar loses container */
+  .nav-section.-hold .nav-wrap .bg {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  .nav-section.-hold .nav-link {
+    color: var(--c-black);
+    mix-blend-mode: normal;
+  }
+
+  .nav-section.-hold .nav-link label {
+    color: var(--c-grey-dark);
+  }
+
+  .nav-section.-hold .nav-wrap .sep {
+    background-color: var(--c-grey-dark);
+    opacity: 0.3;
+  }
+
+  /* ========================================
+     NAVBAR - Hover state (container returns)
+     ======================================== */
+  .nav-section.-hold.-hovered .nav-wrap .bg {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .nav-section.-hold.-hovered .nav-link {
+    color: var(--c-white);
+  }
+
+  .nav-section.-hold.-hovered .nav-link label {
+    color: var(--c-grey);
+  }
+
+  .nav-section.-hold.-hovered .nav-wrap .sep {
+    opacity: 1;
+  }
+
+  /* Hover effect on individual links when navbar is hovered */
+  .nav-section.-hovered .nav-link:hover {
+    opacity: 1;
+  }
+
+  .nav-section.-hovered .nav-link:not(:hover) {
+    opacity: 0.5;
+  }
 </style>
