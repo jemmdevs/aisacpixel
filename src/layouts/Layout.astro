@@ -153,7 +153,8 @@ const {
       
       // Elements (cast to HTMLElement for TypeScript)
       const header = document.querySelector('.header') as HTMLElement | null;
-      const logoSection = document.querySelector('.logo-section') as HTMLElement | null;
+      const logoMax = document.querySelector('.logo-max') as HTMLElement | null;
+      const logoMin = document.querySelector('.logo-min') as HTMLElement | null;
       const navSection = document.querySelector('.nav-section') as HTMLElement | null;
       const welcomeSection = document.querySelector('.c-welcome') as HTMLElement | null;
       const mediaHolder = document.querySelector('.c-welcome .media-holder') as HTMLElement | null;
@@ -216,19 +217,30 @@ const {
         
         // ========================================
         // 1. HEADER TRANSFORMATION
-        // When scrolled past threshold, header goes to "hold" state
+        // When scrolled: logo-max hides, logo-min appears
+        // Navbar container contracts
         // ========================================
         if (scrollY > SCROLL_THRESHOLD && !isScrolled) {
           isScrolled = true;
           document.documentElement.classList.add('-scrolled');
           header?.classList.add('-hold');
-          logoSection?.classList.add('-minimized');
+          
+          // Hide logo-max, show logo-min
+          logoMax?.classList.add('-hidden');
+          logoMin?.classList.add('-visible');
+          
+          // Navbar loses container
           navSection?.classList.add('-hold');
         } else if (scrollY <= SCROLL_THRESHOLD && isScrolled) {
           isScrolled = false;
           document.documentElement.classList.remove('-scrolled');
           header?.classList.remove('-hold');
-          logoSection?.classList.remove('-minimized');
+          
+          // Show logo-max, hide logo-min
+          logoMax?.classList.remove('-hidden');
+          logoMin?.classList.remove('-visible');
+          
+          // Navbar gets container back
           navSection?.classList.remove('-hold');
         }
         

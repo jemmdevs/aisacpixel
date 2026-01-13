@@ -1,12 +1,12 @@
 ---
 // Header component - Exact replica of fiddle.digital header
-// Uses r32.svg mask for rounded corners
+// Has two logo states: logo-max (full) and logo-min (minimized)
 ---
 
 <header class="header">
   <div class="header-wrapper">
-    <!-- Logo Section (Left - 6 columns) -->
-    <div class="logo-section">
+    <!-- LOGO MAX - Full header (visible initially) -->
+    <div class="logo-section logo-max">
       <div class="logo-wrap">
         <span class="bg"></span>
         <a href="/" class="logo-link" aria-label="Home">
@@ -22,6 +22,14 @@
       </div>
     </div>
 
+    <!-- LOGO MIN - Minimized header (visible after scroll) -->
+    <div class="logo-section logo-min">
+      <span class="bg"></span>
+      <a href="/" class="logo-link" aria-label="Home">
+        <span class="brand-name">AISAC.Pixel</span>
+      </a>
+    </div>
+
     <!-- Navigation Section (Right - 8 columns) -->
     <div class="nav-section">
       <div class="nav-wrap">
@@ -31,8 +39,12 @@
           <a href="/about" class="nav-link">About</a>
           <a href="/connect" class="nav-link">Let's talk<label>+</label></a>
           <span class="sep"></span>
-          <a href="#" target="_blank" class="nav-link external">StringTune<label>↗</label></a>
-          <a href="#" target="_blank" class="nav-link external">Exp.<label>↗</label></a>
+          <a href="#" target="_blank" class="nav-link external"
+            >StringTune<label>↗</label></a
+          >
+          <a href="#" target="_blank" class="nav-link external"
+            >Exp.<label>↗</label></a
+          >
         </nav>
       </div>
     </div>
@@ -53,11 +65,12 @@
   }
 
   .header-wrapper {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: var(--g-gap);
     margin: 0 var(--g-margin);
-    align-items: start; /* Align navbar to TOP of header */
+    align-items: start;
   }
 
   @media (min-width: 1024px) {
@@ -67,28 +80,24 @@
   }
 
   /* ========================================
-     LOGO SECTION - The BIG header box
+     LOGO MAX - Full header (large, black)
      Uses r32.svg mask (larger radius)
      ======================================== */
-  .logo-section {
+  .logo-max {
     grid-column: 1 / -1;
     pointer-events: all;
+    height: 2rem; /* Base height, content expands it */
   }
 
   @media (min-width: 1024px) {
-    .logo-section {
+    .logo-max {
       grid-column: 1 / 7;
     }
   }
 
-  /* The main logo container with SVG mask */
-  .logo-wrap {
+  .logo-max .logo-wrap {
     position: relative;
     width: 100%;
-    /* 
-     * KEY: Using r32.svg mask for rounded corners
-     * The mask creates the "squircle" shape
-     */
     mask-image: url(/r32.svg);
     -webkit-mask-image: url(/r32.svg);
     mask-size: 100% 100%;
@@ -97,73 +106,63 @@
     -webkit-mask-repeat: no-repeat;
   }
 
-  /* Background layer inside the masked container */
-  .logo-wrap .bg {
+  .logo-max .logo-wrap .bg {
     position: absolute;
     inset: 0;
     background-color: var(--c-black);
-    /* Double mask for perfect edges */
     mask-image: url(/r32.svg);
     -webkit-mask-image: url(/r32.svg);
     mask-size: 100% 100%;
     -webkit-mask-size: 100% 100%;
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
+    transition: transform 0.6s var(--f-cubic);
   }
 
-  /* The logo link - creates the height with padding */
-  .logo-link {
+  .logo-max .logo-link {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    /* 
-     * KEY: The padding creates the tall header
-     * calc(var(--g-gap) * 2) top and bottom = ~32px padding
-     */
     padding: calc(var(--g-gap) * 2);
     background: none !important;
   }
 
-  /* Logo text container */
-  .logo-text {
+  .logo-max .logo-text {
     display: flex;
     flex-direction: column;
     line-height: 1;
     margin-left: calc(var(--g-gap) * 2);
   }
 
-  .brand-name {
+  .logo-max .brand-name {
     color: var(--c-white);
     font-size: var(--h5);
     font-weight: 400;
     letter-spacing: -0.02em;
   }
 
-  .sub-text {
+  .logo-max .sub-text {
     color: var(--c-grey);
     font-size: var(--mm);
     margin-top: 0.15em;
   }
 
-  /* Agency label - center text */
-  .agency-label {
+  .logo-max .agency-label {
     color: var(--c-grey);
     font-size: var(--mm);
     text-transform: uppercase;
     letter-spacing: 0.15em;
   }
 
-  /* Hide agency label on mobile */
   @media (max-width: 1023px) {
-    .agency-label {
+    .logo-max .agency-label {
       display: none;
     }
   }
 
-  /* Logo icon - the circles */
-  .logo-icon {
+  .logo-max .logo-icon {
     color: var(--c-grey);
     width: 4.8rem;
     height: auto;
@@ -171,9 +170,85 @@
     margin-right: calc(var(--g-gap) * 2);
   }
 
+  /* ========================================
+     LOGO MIN - Minimized header (small, grey)
+     Uses r16.svg mask (same as navbar)
+     Positioned absolutely to prevent layout shift
+     ======================================== */
+  .logo-min {
+    grid-column: 1 / -1;
+    pointer-events: all;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    display: none; /* Hidden by default, shown on scroll */
+    opacity: 0;
+    visibility: hidden;
+    mask-image: url(/r16.svg);
+    -webkit-mask-image: url(/r16.svg);
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+  }
+
+  @media (min-width: 1024px) {
+    .logo-min {
+      /* Match logo-max starting column, but smaller width */
+      right: auto;
+      width: calc((100% - 13 * var(--g-gap)) / 14 * 3 + 2 * var(--g-gap));
+    }
+  }
+
+  .logo-min .bg {
+    position: absolute;
+    inset: 0;
+    background-color: var(--c-grey);
+    mask-image: url(/r16.svg);
+    -webkit-mask-image: url(/r16.svg);
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    transform-origin: bottom center;
+    transform: scaleY(0); /* Start collapsed, will animate in */
+    transition: transform 0.5s var(--f-cubic);
+  }
+
+  .logo-min .logo-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 0 calc(var(--g-gap) * 2);
+    background: none !important;
+  }
+
+  /* Circle indicator after the logo */
+  .logo-min .logo-link::after {
+    content: "";
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    border: 0.15rem solid var(--c-black);
+    border-radius: 50%;
+    margin-right: calc(var(--g-gap));
+    transition: transform 0.6s var(--f-cubic);
+  }
+
+  .logo-min .brand-name {
+    color: var(--c-black);
+    font-size: var(--m);
+    font-weight: 400;
+    margin-left: calc(var(--g-gap) * 2);
+  }
 
   /* ========================================
-     NAVIGATION SECTION - The smaller nav bar
+     NAVIGATION SECTION
      Uses r16.svg mask (smaller radius)
      ======================================== */
   .nav-section {
@@ -188,13 +263,9 @@
     }
   }
 
-  /* Nav container with SVG mask */
   .nav-wrap {
     position: relative;
     height: 2rem;
-    /* 
-     * KEY: Using r16.svg mask (smaller radius than header)
-     */
     mask-image: url(/r16.svg);
     -webkit-mask-image: url(/r16.svg);
     mask-size: 100% 100%;
@@ -213,6 +284,8 @@
     -webkit-mask-size: 100% 100%;
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
+    transform-origin: top center;
+    transition: transform 0.5s var(--f-cubic);
   }
 
   .nav-wrap nav {
@@ -231,7 +304,9 @@
     display: flex;
     align-items: center;
     gap: 0.2em;
-    transition: opacity 0.3s var(--f-cubic);
+    transition:
+      color 0.3s var(--f-cubic),
+      opacity 0.3s var(--f-cubic);
   }
 
   .nav-link:hover {
@@ -242,78 +317,70 @@
     color: var(--c-grey);
     font-size: var(--mm);
     cursor: pointer;
+    transition: color 0.3s var(--f-cubic);
   }
 
   .nav-wrap .sep {
     width: 1px;
     height: var(--m);
     background-color: var(--c-grey-dark);
+    transition: opacity 0.3s var(--f-cubic);
   }
 
   /* ========================================
-     SCROLL-BASED ANIMATIONS
-     Header transforms when scrolled past threshold
+     SCROLL STATES - Logo Max/Min Toggle
      ======================================== */
 
-  /* LOGO SECTION - Transition to minimized state */
-  .logo-wrap .bg {
-    transition: transform 0.6s var(--f-cubic);
+  /* Transitions for logo-max */
+  .logo-max {
+    transition:
+      opacity 0.4s var(--f-cubic),
+      transform 0.5s var(--f-cubic);
   }
 
-  .logo-link {
-    transition: padding 0.6s var(--f-cubic), opacity 0.3s var(--f-cubic);
+  .logo-max .logo-wrap .bg {
+    transform-origin: top center;
   }
 
-  .logo-text,
-  .agency-label,
-  .logo-icon {
-    transition: transform 0.6s var(--f-cubic), opacity 0.4s var(--f-cubic);
-  }
-
-  /* When scrolled - Logo minimizes */
-  .logo-section.-minimized .logo-wrap .bg {
-    transform: translateY(-100%);
-  }
-
-  .logo-section.-minimized .logo-link {
-    padding: 0.5rem calc(var(--g-gap) * 2);
-  }
-
-  .logo-section.-minimized .agency-label,
-  .logo-section.-minimized .logo-icon,
-  .logo-section.-minimized .sub-text {
+  /* When scrolled - Hide logo-max, show logo-min */
+  .logo-max.-hidden {
     opacity: 0;
+    pointer-events: none;
     transform: translateY(-1rem);
   }
 
-  .logo-section.-minimized .brand-name {
-    font-size: var(--m);
+  .logo-max.-hidden .logo-wrap .bg {
+    transform: scaleY(0);
+  }
+
+  /* Logo-min - entrance animation similar to navbar */
+  .logo-min {
+    transition:
+      opacity 0.4s var(--f-cubic),
+      visibility 0.4s var(--f-cubic);
+  }
+
+  /* When visible, show the container and animate the bg in */
+  .logo-min.-visible {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+  }
+
+  .logo-min.-visible .bg {
+    transform: scaleY(1);
   }
 
   /* ========================================
      NAVBAR - Hold state (no container)
-     Container CONTRACTS downward (no fade)
      ======================================== */
-  .nav-wrap .bg {
-    /* Transform origin at TOP so it contracts downward */
-    transform-origin: top center;
-    transition: transform 0.5s var(--f-cubic);
-  }
-
-  .nav-link,
-  .nav-link label {
-    transition: color 0.3s var(--f-cubic), opacity 0.3s var(--f-cubic);
-  }
-
-  /* When scrolled - Navbar container contracts to nothing */
   .nav-section.-hold .nav-wrap .bg {
-    /* Scale to 0 height, contracting from top to bottom */
     transform: scaleY(0);
   }
 
   .nav-section.-hold .nav-link {
     color: var(--c-black);
-    mix-blend-mode: normal;
   }
 
   .nav-section.-hold .nav-link label {
@@ -321,18 +388,14 @@
   }
 
   .nav-section.-hold .nav-wrap .sep {
-    background-color: var(--c-grey-dark);
     opacity: 0.3;
   }
 
   /* ========================================
      NAVBAR - Hover state (container returns)
-     Container EXPANDS from bottom to top
      ======================================== */
   .nav-section.-hold.-hovered .nav-wrap .bg {
-    /* Transform origin at BOTTOM so it expands upward */
     transform-origin: bottom center;
-    /* Back to full size */
     transform: scaleY(1);
   }
 
@@ -348,7 +411,6 @@
     opacity: 1;
   }
 
-  /* Hover effect on individual links when navbar is hovered */
   .nav-section.-hovered .nav-link:hover {
     opacity: 1;
   }
