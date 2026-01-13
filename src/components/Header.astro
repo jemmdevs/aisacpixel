@@ -292,9 +292,12 @@
 
   /* ========================================
      NAVBAR - Hold state (no container)
+     Container CONTRACTS downward (no fade)
      ======================================== */
   .nav-wrap .bg {
-    transition: transform 0.6s var(--f-cubic), opacity 0.4s var(--f-cubic);
+    /* Transform origin at TOP so it contracts downward */
+    transform-origin: top center;
+    transition: transform 0.5s var(--f-cubic);
   }
 
   .nav-link,
@@ -302,10 +305,10 @@
     transition: color 0.3s var(--f-cubic), opacity 0.3s var(--f-cubic);
   }
 
-  /* When scrolled - Navbar loses container */
+  /* When scrolled - Navbar container contracts to nothing */
   .nav-section.-hold .nav-wrap .bg {
-    transform: translateY(-100%);
-    opacity: 0;
+    /* Scale to 0 height, contracting from top to bottom */
+    transform: scaleY(0);
   }
 
   .nav-section.-hold .nav-link {
@@ -324,10 +327,13 @@
 
   /* ========================================
      NAVBAR - Hover state (container returns)
+     Container EXPANDS from bottom to top
      ======================================== */
   .nav-section.-hold.-hovered .nav-wrap .bg {
-    transform: translateY(0);
-    opacity: 1;
+    /* Transform origin at BOTTOM so it expands upward */
+    transform-origin: bottom center;
+    /* Back to full size */
+    transform: scaleY(1);
   }
 
   .nav-section.-hold.-hovered .nav-link {

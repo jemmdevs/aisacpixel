@@ -1,0 +1,68 @@
+---
+/**
+ * OptimizedImage - Image component with performance optimizations
+ * Features:
+ * - Native lazy loading
+ * - Async decoding
+ * - Aspect ratio preservation to prevent CLS
+ * - Placeholder blur effect
+ */
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  class: className = '',
+  loading = 'lazy',
+  fetchpriority = 'auto',
+} = Astro.props;
+
+// Calculate aspect ratio if dimensions provided
+const aspectRatio = width && height ? `${width} / ${height}` : undefined;
+---
+
+<div 
+  class={`optimized-image ${className}`}
+  style={aspectRatio ? `aspect-ratio: ${aspectRatio};` : undefined}
+>
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding="async"
+    fetchpriority={fetchpriority}
+    onload="this.classList.add('loaded')"
+  />
+</div>
+
+<style>
+  .optimized-image {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--c-grey) 0%, var(--c-berry) 100%);
+  }
+
+  .optimized-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .optimized-image img.loaded {
+    opacity: 1;
+  }
+</style>

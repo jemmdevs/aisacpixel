@@ -1,0 +1,169 @@
+---
+/**
+ * OptimizedVideo - Video component with performance optimizations
+ * Features:
+ * - Lazy loading with IntersectionObserver
+ * - Auto-pause when out of viewport
+ * - Poster image support
+ * - Preload optimization
+ */
+interface Props {
+  src: string;
+  poster?: string;
+  class?: string;
+  autoplay?: boolean;
+  loop?: boolean;
+  muted?: boolean;
+  playsinline?: boolean;
+  preload?: 'none' | 'metadata' | 'auto';
+}
+
+const {
+  src,
+  poster,
+  class: className = '',
+  autoplay = true,
+  loop = true,
+  muted = true,
+  playsinline = true,
+  preload = 'none', // Start with none for lazy loading
+} = Astro.props;
+---
+
+<div class={`optimized-video ${className}`} data-video-container>
+  <video
+    data-src={src}
+    poster={poster}
+    autoplay={autoplay}
+    loop={loop}
+    muted={muted}
+    playsinline={playsinline}
+    preload={preload}
+    loading="lazy"
+  >
+    <source data-src={src} type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+  
+  <!-- Placeholder shown while video loads -->
+  <div class="video-loading-placeholder">
+    <span class="play-icon">▶</span>
+  </div>
+</div>
+
+<style>
+  .optimized-video {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .optimized-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .optimized-video video.loaded {
+    opacity: 1;
+  }
+
+  .video-loading-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--c-grey-dark) 0%, var(--c-black) 100%);
+    transition: opacity 0.5s ease;
+  }
+
+  .optimized-video video.loaded + .video-loading-placeholder {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .play-icon {
+    color: var(--c-grey);
+    font-size: 2rem;
+    opacity: 0.5;
+  }
+</style>
+
+<script>
+  // Video optimization: lazy load and auto-pause
+  const initOptimizedVideos = () => {
+    const videoContainers = document.querySelectorAll('[data-video-container]');
+    
+    if (!videoContainers.length) return;
+    
+    // IntersectionObserver for lazy loading and auto-pause
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const container = entry.target as HTMLElement;
+          const video = container.querySelector('video') as HTMLVideoElement;
+          
+          if (!video) return;
+          
+          if (entry.isIntersecting) {
+            // Video is in viewport
+            
+            // Lazy load: set src if not already loaded
+            if (!video.src && video.dataset.src) {
+              video.src = video.dataset.src;
+              const source = video.querySelector('source');
+              if (source && source.dataset.src) {
+                source.src = source.dataset.src;
+              }
+              video.load();
+            }
+            
+            // Play video
+            video.play().catch(() => {
+              // Autoplay might be blocked, that's ok
+            });
+          } else {
+            // Video is out of viewport - pause to save resources
+            if (!video.paused) {
+              video.pause();
+            }
+          }
+        });
+      },
+      {
+        rootMargin: '50px', // Start loading a bit before it's visible
+        threshold: 0.1, // Trigger when 10% visible
+      }
+    );
+    
+    // Observe all video containers
+    videoContainers.forEach((container) => {
+      const video = container.querySelector('video');
+      
+      if (video) {
+        // Mark as loaded when video can play
+        video.addEventListener('canplay', () => {
+          video.classList.add('loaded');
+        });
+        
+        // Also handle loadeddata for cached videos
+        video.addEventListener('loadeddata', () => {
+          video.classList.add('loaded');
+        });
+      }
+      
+      observer.observe(container);
+    });
+  };
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initOptimizedVideos);
+  } else {
+    initOptimizedVideos();
+  }
+</script>

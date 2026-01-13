@@ -193,6 +193,12 @@ const {
      */
     padding-bottom: 56.25%; /* 16:9 */
     background-color: var(--c-black);
+    /* 
+     * Center content while contracting
+     * Moves up by half the progress to keep center visible
+     */
+    transform: translateY(calc(var(--progress, 0) * -50%));
+    transition: transform 0.1s linear;
   }
 
   @media (min-width: 1024px) {

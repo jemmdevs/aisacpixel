@@ -18,10 +18,28 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101214" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    
+    <!-- Preconnect to external domains for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    
+    <!-- Preload critical font -->
+    <link 
+      rel="preload" 
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" 
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    </noscript>
     
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
@@ -306,6 +324,59 @@ const {
       setTimeout(() => {
         document.documentElement.classList.add('-ready', '-loaded');
       }, 100);
+      
+      // ========================================
+      // 4. SECTION VISIBILITY OBSERVER
+      // Pause animations in sections that are not visible
+      // This saves CPU/GPU resources
+      // ========================================
+      const sectionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+            } else {
+              entry.target.classList.remove('in-view');
+            }
+          });
+        },
+        {
+          rootMargin: '100px',
+          threshold: 0.01,
+        }
+      );
+      
+      // Observe all sections
+      document.querySelectorAll('section').forEach((section) => {
+        sectionObserver.observe(section);
+      });
+      
+      // ========================================
+      // 5. CLEANUP ON PAGE HIDE
+      // Pause videos and animations when tab is not visible
+      // ========================================
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          // Pause all videos
+          document.querySelectorAll('video').forEach((video) => {
+            if (!video.paused) {
+              video.dataset.wasPlaying = 'true';
+              video.pause();
+            }
+          });
+          // Stop Lenis smooth scroll
+          lenis.stop();
+        } else {
+          // Resume videos that were playing
+          document.querySelectorAll('video[data-was-playing="true"]').forEach((el) => {
+            const video = el as HTMLVideoElement;
+            video.play().catch(() => {});
+            delete video.dataset.wasPlaying;
+          });
+          // Resume Lenis
+          lenis.start();
+        }
+      });
     </script>
   </body>
 </html>
