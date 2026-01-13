@@ -11,7 +11,7 @@ const {
   title = "House of digital aesthetics",
   subtitle1 = "Place where well-crafted web projects are born.",
   subtitle2 = "We provide end-to-end web development and design services.",
-  copyright = "©2017—2025"
+  copyright = "©2017—2025",
 } = Astro.props;
 ---
 
@@ -65,7 +65,8 @@ const {
   <!-- Brief/CTA -->
   <div class="brief">
     <p class="brief-text">
-      An award-winning<span class="stat">(55+)</span>digital-first Design Agency committed to
+      An award-winning<span class="stat">(55+)</span>digital-first Design Agency
+      committed to
       <svg class="icon" viewBox="0 0 24 24">
         <use href="#icon-24_aesthetics"></use>
       </svg>
@@ -163,7 +164,7 @@ const {
      */
     position: relative;
     transform: translateZ(0);
-    
+
     /* 
      * CONTRACTING EFFECT
      * overflow: hidden clips the content from bottom
@@ -236,10 +237,19 @@ const {
   }
 
   @keyframes gradientFlow {
-    0%, 100% { background-position: 0% 50%; }
-    25% { background-position: 100% 50%; }
-    50% { background-position: 100% 100%; }
-    75% { background-position: 0% 100%; }
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    25% {
+      background-position: 100% 50%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    75% {
+      background-position: 0% 100%;
+    }
   }
 
   /* FDDA Badge */
@@ -315,7 +325,8 @@ const {
     color: var(--c-grey-dark);
   }
 
-  .p-1, .p-2 {
+  .p-1,
+  .p-2 {
     font-size: var(--m);
     color: var(--c-black);
     margin: 0;
@@ -458,8 +469,8 @@ const {
     position: absolute;
     inset: 0;
     background-color: var(--c-black);
-    mask: url(/r32.svg);
-    -webkit-mask: url(/r32.svg);
+    mask: url(/r18.svg);
+    -webkit-mask: url(/r18.svg);
     mask-size: 100% 100%;
     -webkit-mask-size: 100% 100%;
     transition: transform 0.6s var(--f-cubic);
@@ -467,7 +478,7 @@ const {
 
   .brief .button .basic,
   .brief .button .hover {
-    padding: calc(var(--g-gap) * 2) calc(var(--g-gap) * 4);
+    padding: calc(var(--g-gap) * 4) calc(var(--g-gap) * 5);
     font-size: var(--m);
     position: relative;
     transition: transform 0.6s var(--f-cubic);
