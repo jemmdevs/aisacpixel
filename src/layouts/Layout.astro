@@ -101,7 +101,7 @@ const {
       });
 
       // Optimized animation loop using requestAnimationFrame
-      function raf(time) {
+      function raf(time: number) {
         lenis.raf(time);
         requestAnimationFrame(raf);
       }
@@ -110,7 +110,7 @@ const {
       requestAnimationFrame(raf);
 
       // Expose lenis to window for external access (useful for scroll-based animations)
-      window.lenis = lenis;
+      (window as any).lenis = lenis;
 
       // Add class to html when scroll is ready
       document.documentElement.classList.add('lenis-ready');
@@ -119,9 +119,12 @@ const {
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', (e) => {
           e.preventDefault();
-          const target = document.querySelector(anchor.getAttribute('href'));
-          if (target) {
-            lenis.scrollTo(target);
+          const href = anchor.getAttribute('href');
+          if (href) {
+            const target = document.querySelector(href) as HTMLElement | null;
+            if (target) {
+              lenis.scrollTo(target);
+            }
           }
         });
       });
@@ -130,13 +133,13 @@ const {
       // SCROLL-BASED ANIMATIONS
       // ========================================
       
-      // Elements
-      const header = document.querySelector('.header');
-      const logoSection = document.querySelector('.logo-section');
-      const navSection = document.querySelector('.nav-section');
-      const welcomeSection = document.querySelector('.c-welcome');
-      const mediaHolder = document.querySelector('.c-welcome .media-holder');
-      const mediaWrap = document.querySelector('.c-welcome .media-wrap');
+      // Elements (cast to HTMLElement for TypeScript)
+      const header = document.querySelector('.header') as HTMLElement | null;
+      const logoSection = document.querySelector('.logo-section') as HTMLElement | null;
+      const navSection = document.querySelector('.nav-section') as HTMLElement | null;
+      const welcomeSection = document.querySelector('.c-welcome') as HTMLElement | null;
+      const mediaHolder = document.querySelector('.c-welcome .media-holder') as HTMLElement | null;
+      const mediaWrap = document.querySelector('.c-welcome .media-wrap') as HTMLElement | null;
       
       // Threshold: when header should transform (in pixels from top)
       const SCROLL_THRESHOLD = 100;
