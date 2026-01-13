@@ -418,13 +418,15 @@ const {
     color: var(--c-black);
     margin: 0;
     text-indent: 33.333%;
+    letter-spacing: -0.02em;
   }
 
   @media (min-width: 1024px) {
     .brief-text {
-      grid-column: 3 / 13;
-      font-size: var(--h4);
-      text-indent: 40%;
+      grid-column: 2 / 14; /* Wider area */
+      font-size: 2.25rem; /* 45px at 20px base */
+      text-indent: 46%; /* More indent for first line */
+      letter-spacing: -0.025em;
     }
   }
 
@@ -448,7 +450,7 @@ const {
     width: 1.2rem;
     height: 1.2rem;
     fill: var(--c-black);
-    margin: 0 var(--m);
+    margin: 0 0.1rem;
     vertical-align: middle;
   }
 
