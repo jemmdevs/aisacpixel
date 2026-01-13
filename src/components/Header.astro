@@ -211,7 +211,7 @@
     -webkit-mask-repeat: no-repeat;
     transform-origin: bottom center;
     transform: scaleY(0); /* Start collapsed */
-    transition: transform 0.5s var(--f-cubic) 0.3s; /* 0.3s delay - appears AFTER logo-max hides */
+    transition: transform 0.5s var(--f-cubic);
   }
 
   .logo-min .logo-link {
@@ -235,8 +235,8 @@
     border-radius: 50%;
     margin-right: calc(var(--g-gap));
     transition:
-      border-color 0.3s var(--f-cubic) 0.3s,
-      /* delay to sync with bg */ transform 0.6s var(--f-cubic);
+      border-color 0.3s var(--f-cubic),
+      transform 0.6s var(--f-cubic);
   }
 
   /* Text starts transparent */
@@ -245,7 +245,7 @@
     font-size: var(--m);
     font-weight: 400;
     margin-left: calc(var(--g-gap) * 2);
-    transition: color 0.3s var(--f-cubic) 0.3s; /* delay to sync with bg */
+    transition: color 0.3s var(--f-cubic);
   }
 
   /* ========================================
@@ -358,43 +358,32 @@
     transition: opacity 0.3s var(--f-cubic);
   }
 
-  /* When logo-max returns (scroll up) - add delay so it appears AFTER logo-min hides */
-  .logo-max:not(.-hidden) .logo-wrap .bg {
-    transition-delay: 0.3s;
-  }
-
   /* Logo-min - when activated, show everything */
   .logo-min.-visible {
     pointer-events: all;
   }
 
-  /* Background expands from bottom */
+  /* Background expands from bottom - with delay so it appears AFTER logo-max hides */
   .logo-min.-visible .bg {
     transform: scaleY(1);
+    transition-delay: 0.2s;
   }
 
-  /* Text fades in */
+  /* Text fades in - with delay */
   .logo-min.-visible .brand-name {
     color: var(--c-black);
+    transition-delay: 0.2s;
   }
 
-  /* Circle border fades in */
+  /* Circle border fades in - with delay */
   .logo-min.-visible .logo-link::after {
     border-color: var(--c-black);
+    transition-delay: 0.2s;
   }
 
   /* When logo-min hides (scroll up) - contract from bottom to top */
   .logo-min:not(.-visible) .bg {
     transform-origin: top center; /* Contract upward */
-    transition-delay: 0s;
-  }
-
-  .logo-min:not(.-visible) .brand-name {
-    transition-delay: 0s;
-  }
-
-  .logo-min:not(.-visible) .logo-link::after {
-    transition-delay: 0s;
   }
 
   /* ========================================
