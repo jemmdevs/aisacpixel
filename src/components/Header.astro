@@ -116,6 +116,7 @@
     -webkit-mask-size: 100% 100%;
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
+    transform-origin: bottom center; /* Default: appears from bottom */
     transition: transform 0.6s var(--f-cubic);
   }
 
@@ -141,12 +142,14 @@
     font-size: var(--h5);
     font-weight: 400;
     letter-spacing: -0.02em;
+    transition: color 0.3s var(--f-cubic);
   }
 
   .logo-max .sub-text {
     color: var(--c-grey);
     font-size: var(--mm);
     margin-top: 0.15em;
+    transition: color 0.3s var(--f-cubic);
   }
 
   .logo-max .agency-label {
@@ -154,6 +157,7 @@
     font-size: var(--mm);
     text-transform: uppercase;
     letter-spacing: 0.15em;
+    transition: color 0.3s var(--f-cubic);
   }
 
   @media (max-width: 1023px) {
@@ -173,25 +177,18 @@
   /* ========================================
      LOGO MIN - Minimized header (small, grey)
      Uses r16.svg mask (same as navbar)
-     Positioned absolutely to prevent layout shift
+     Always present, animated via scaleY and color
      ======================================== */
   .logo-min {
     grid-column: 1 / -1;
-    pointer-events: all;
+    pointer-events: none; /* Initially not interactive */
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 2rem;
-    display: none; /* Hidden by default, shown on scroll */
-    opacity: 0;
-    visibility: hidden;
-    mask-image: url(/r16.svg);
-    -webkit-mask-image: url(/r16.svg);
-    mask-size: 100% 100%;
-    -webkit-mask-size: 100% 100%;
-    mask-repeat: no-repeat;
-    -webkit-mask-repeat: no-repeat;
+    display: flex; /* Always visible, never display:none */
+    align-items: center;
   }
 
   @media (min-width: 1024px) {
@@ -213,8 +210,8 @@
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
     transform-origin: bottom center;
-    transform: scaleY(0); /* Start collapsed, will animate in */
-    transition: transform 0.5s var(--f-cubic);
+    transform: scaleY(0); /* Start collapsed */
+    transition: transform 0.5s var(--f-cubic) 0.3s; /* 0.3s delay - appears AFTER logo-max hides */
   }
 
   .logo-min .logo-link {
@@ -228,23 +225,27 @@
     background: none !important;
   }
 
-  /* Circle indicator after the logo */
+  /* Circle indicator after the logo - starts transparent */
   .logo-min .logo-link::after {
     content: "";
     display: block;
     width: 1rem;
     height: 1rem;
-    border: 0.15rem solid var(--c-black);
+    border: 0.15rem solid transparent; /* Starts transparent */
     border-radius: 50%;
     margin-right: calc(var(--g-gap));
-    transition: transform 0.6s var(--f-cubic);
+    transition:
+      border-color 0.3s var(--f-cubic) 0.3s,
+      /* delay to sync with bg */ transform 0.6s var(--f-cubic);
   }
 
+  /* Text starts transparent */
   .logo-min .brand-name {
-    color: var(--c-black);
+    color: transparent; /* Starts transparent */
     font-size: var(--m);
     font-weight: 400;
     margin-left: calc(var(--g-gap) * 2);
+    transition: color 0.3s var(--f-cubic) 0.3s; /* delay to sync with bg */
   }
 
   /* ========================================
@@ -284,7 +285,7 @@
     -webkit-mask-size: 100% 100%;
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
-    transform-origin: top center;
+    transform-origin: bottom center; /* Default: appears from bottom */
     transition: transform 0.5s var(--f-cubic);
   }
 
@@ -331,50 +332,80 @@
      SCROLL STATES - Logo Max/Min Toggle
      ======================================== */
 
-  /* Transitions for logo-max */
-  .logo-max {
-    transition:
-      opacity 0.4s var(--f-cubic),
-      transform 0.5s var(--f-cubic);
-  }
-
-  .logo-max .logo-wrap .bg {
+  /* When scrolling DOWN - logo-max disappears from top */
+  .logo-max.-hiding .logo-wrap .bg {
     transform-origin: top center;
   }
 
-  /* When scrolled - Hide logo-max, show logo-min */
+  /* When scrolled - Hide logo-max (no fade, just bg contracts) */
   .logo-max.-hidden {
-    opacity: 0;
     pointer-events: none;
-    transform: translateY(-1rem);
   }
 
   .logo-max.-hidden .logo-wrap .bg {
     transform: scaleY(0);
   }
 
-  /* Logo-min - entrance animation similar to navbar */
-  .logo-min {
-    transition:
-      opacity 0.4s var(--f-cubic),
-      visibility 0.4s var(--f-cubic);
+  /* Text becomes transparent when hidden */
+  .logo-max.-hidden .brand-name,
+  .logo-max.-hidden .sub-text,
+  .logo-max.-hidden .agency-label {
+    color: transparent;
   }
 
-  /* When visible, show the container and animate the bg in */
+  .logo-max.-hidden .logo-icon {
+    opacity: 0;
+    transition: opacity 0.3s var(--f-cubic);
+  }
+
+  /* When logo-max returns (scroll up) - add delay so it appears AFTER logo-min hides */
+  .logo-max:not(.-hidden) .logo-wrap .bg {
+    transition-delay: 0.3s;
+  }
+
+  /* Logo-min - when activated, show everything */
   .logo-min.-visible {
-    display: flex;
-    opacity: 1;
-    visibility: visible;
     pointer-events: all;
   }
 
+  /* Background expands from bottom */
   .logo-min.-visible .bg {
     transform: scaleY(1);
+  }
+
+  /* Text fades in */
+  .logo-min.-visible .brand-name {
+    color: var(--c-black);
+  }
+
+  /* Circle border fades in */
+  .logo-min.-visible .logo-link::after {
+    border-color: var(--c-black);
+  }
+
+  /* When logo-min hides (scroll up) - contract from bottom to top */
+  .logo-min:not(.-visible) .bg {
+    transform-origin: top center; /* Contract upward */
+    transition-delay: 0s;
+  }
+
+  .logo-min:not(.-visible) .brand-name {
+    transition-delay: 0s;
+  }
+
+  .logo-min:not(.-visible) .logo-link::after {
+    transition-delay: 0s;
   }
 
   /* ========================================
      NAVBAR - Hold state (no container)
      ======================================== */
+
+  /* When scrolling DOWN - navbar bg disappears from top */
+  .nav-section.-hiding .nav-wrap .bg {
+    transform-origin: top center;
+  }
+
   .nav-section.-hold .nav-wrap .bg {
     transform: scaleY(0);
   }
