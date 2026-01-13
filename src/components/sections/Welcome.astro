@@ -1,0 +1,465 @@
+---
+// c-welcome - Hero section - Exact replica of fiddle.digital
+interface Props {
+  title?: string;
+  subtitle1?: string;
+  subtitle2?: string;
+  copyright?: string;
+}
+
+const {
+  title = "House of digital aesthetics",
+  subtitle1 = "Place where well-crafted web projects are born.",
+  subtitle2 = "We provide end-to-end web development and design services.",
+  copyright = "©2017—2025"
+} = Astro.props;
+---
+
+<section class="c-welcome">
+  <!-- Visual Area: Focus Arrow + Video -->
+  <div class="visual">
+    <!-- Focus Arrow (Left side) -->
+    <div class="focus-arrow">
+      <svg viewBox="0 0 384 384">
+        <use href="#focus-arrow"></use>
+      </svg>
+    </div>
+
+    <!-- Media/Video (Right side) -->
+    <div class="media-wrap">
+      <div class="media-holder">
+        <div class="media">
+          <div class="mw-mh-m-d">
+            <div class="video-wrap">
+              <div class="video-placeholder"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fdda-badge">
+        <span>APDA</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Words Section -->
+  <div class="words">
+    <h1 class="title">
+      <span class="main">{title}<sup>®</sup></span>
+      <span class="location"> – Based in Valencia, Spain</span>
+    </h1>
+    <p class="p-1">{subtitle1}</p>
+    <p class="p-2">{subtitle2}</p>
+  </div>
+
+  <!-- Horizontal Line -->
+  <div class="hl-wrapper">
+    <span class="hl"></span>
+  </div>
+
+  <!-- Copyright -->
+  <div class="wrap">
+    <span class="copy">{copyright}</span>
+  </div>
+
+  <!-- Brief/CTA -->
+  <div class="brief">
+    <p class="brief-text">
+      An award-winning<span class="stat">(55+)</span>digital-first Design Agency committed to
+      <svg class="icon" viewBox="0 0 24 24">
+        <use href="#icon-24_aesthetics"></use>
+      </svg>
+      exceptional design and the highest development
+      <svg class="icon" viewBox="0 0 24 24">
+        <use href="#icon-24_dev"></use>
+      </svg>
+      standards.
+    </p>
+    <a href="/connect" class="button" aria-label="Get in touch">
+      <span class="basic"><span>Get in touch</span></span>
+      <span class="hover"><span>Get in touch</span></span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .c-welcome {
+    position: relative;
+    z-index: 20;
+    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* ========================================
+     VISUAL AREA
+     ======================================== */
+  .visual {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--g-gap);
+    margin: 0 var(--g-margin);
+    padding-top: calc(2rem + var(--g-gap));
+  }
+
+  @media (min-width: 1024px) {
+    .visual {
+      grid-template-columns: repeat(14, 1fr);
+      padding-top: calc(2rem + var(--g-gap) * 2);
+      margin-bottom: 2.5%;
+    }
+  }
+
+  /* Focus Arrow */
+  .focus-arrow {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .focus-arrow {
+      display: flex;
+      grid-column: 1 / 4;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding-bottom: var(--h3);
+    }
+
+    .focus-arrow svg {
+      fill: var(--c-black);
+      width: 100%;
+      max-width: 12rem;
+      transform: scaleX(-1);
+      padding: 0.1rem;
+    }
+  }
+
+  /* Media Wrap */
+  .media-wrap {
+    grid-column: 1 / -1;
+    position: relative;
+    z-index: 21;
+  }
+
+  @media (min-width: 1024px) {
+    .media-wrap {
+      grid-column: 7 / 15;
+    }
+  }
+
+  .media-holder {
+    contain: paint;
+    mask: url(/r24.svg);
+    -webkit-mask: url(/r24.svg);
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  @media (min-width: 1024px) {
+    .media-holder {
+      mask: url(/r32.svg);
+      -webkit-mask: url(/r32.svg);
+      aspect-ratio: 21 / 12;
+    }
+  }
+
+  .media {
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
+
+  .mw-mh-m-d {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .video-wrap {
+    position: absolute;
+    inset: 0;
+  }
+
+  .video-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      #1a1a2e 0%,
+      #16213e 25%,
+      #0f3460 50%,
+      #533483 75%,
+      #e94560 100%
+    );
+    background-size: 400% 400%;
+    animation: gradientFlow 15s ease infinite;
+  }
+
+  @keyframes gradientFlow {
+    0%, 100% { background-position: 0% 50%; }
+    25% { background-position: 100% 50%; }
+    50% { background-position: 100% 100%; }
+    75% { background-position: 0% 100%; }
+  }
+
+  /* FDDA Badge */
+  .fdda-badge {
+    position: absolute;
+    right: 1rem;
+    top: 100%;
+    transform: translateY(0.5rem);
+  }
+
+  .fdda-badge span {
+    font-size: var(--mm);
+    text-transform: uppercase;
+    color: var(--c-black);
+    background-color: var(--c-berry);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+
+  /* ========================================
+     WORDS SECTION
+     ======================================== */
+  .words {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--g-gap);
+    margin: 0 var(--g-margin);
+    margin-top: var(--h5);
+    padding-bottom: var(--g-margin);
+    align-items: baseline;
+  }
+
+  @media (min-width: 1024px) {
+    .words {
+      grid-template-columns: repeat(14, 1fr);
+      margin-top: var(--h3);
+      padding-bottom: var(--g-gap);
+    }
+  }
+
+  .title {
+    grid-column: 1 / -1;
+    font-size: var(--m);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: var(--h5);
+  }
+
+  @media (min-width: 1024px) {
+    .title {
+      grid-column: 1 / 6;
+      margin-bottom: 0;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .title {
+      font-size: var(--h4);
+    }
+  }
+
+  .title .main {
+    color: var(--c-black);
+  }
+
+  .title sup {
+    font-size: 0.5em;
+    vertical-align: super;
+    color: var(--c-grey-dark);
+  }
+
+  .title .location {
+    color: var(--c-grey-dark);
+  }
+
+  .p-1, .p-2 {
+    font-size: var(--m);
+    color: var(--c-black);
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .p-1 {
+      grid-column: 1 / 4;
+    }
+    .p-2 {
+      grid-column: 4 / 7;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .p-1 {
+      grid-column: 7 / 11;
+    }
+    .p-2 {
+      grid-column: 11 / 15;
+    }
+  }
+
+  /* ========================================
+     HORIZONTAL LINE
+     ======================================== */
+  .hl-wrapper {
+    margin: 0 var(--g-margin);
+  }
+
+  .hl {
+    display: block;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+
+  /* ========================================
+     WRAP (Copyright)
+     ======================================== */
+  .wrap {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--g-gap);
+    margin: 0 var(--g-margin);
+    padding-top: calc(var(--g-gap) * 2);
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .wrap {
+      grid-template-columns: repeat(14, 1fr);
+    }
+  }
+
+  .copy {
+    font-size: var(--mm);
+    color: var(--c-grey-dark);
+    font-feature-settings: "ss12";
+  }
+
+  /* ========================================
+     BRIEF SECTION
+     ======================================== */
+  .brief {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--g-gap);
+    margin: 0 var(--g-margin);
+    margin-top: var(--h2);
+    padding-bottom: calc(var(--g-gap) * 4);
+  }
+
+  @media (min-width: 1024px) {
+    .brief {
+      grid-template-columns: repeat(14, 1fr);
+    }
+  }
+
+  .brief-text {
+    grid-column: 1 / -1;
+    font-size: var(--h4);
+    line-height: 1.1;
+    color: var(--c-black);
+    margin: 0;
+    text-indent: 33.333%;
+  }
+
+  @media (min-width: 1024px) {
+    .brief-text {
+      grid-column: 3 / 13;
+      font-size: var(--h4);
+      text-indent: 40%;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .brief-text {
+      font-size: var(--h5);
+      text-indent: 0;
+    }
+  }
+
+  .brief-text .stat {
+    font-size: var(--mm);
+    text-transform: uppercase;
+    vertical-align: top;
+    margin-right: var(--mm);
+    color: var(--c-grey-dark);
+  }
+
+  .brief-text .icon {
+    display: inline-block;
+    width: 1.2rem;
+    height: 1.2rem;
+    fill: var(--c-black);
+    margin: 0 var(--m);
+    vertical-align: middle;
+  }
+
+  /* Button */
+  .brief .button {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: calc(var(--g-gap) * 4);
+    position: relative;
+    display: inline-flex;
+    overflow: hidden;
+    background: none !important;
+  }
+
+  @media (min-width: 1024px) {
+    .brief .button {
+      grid-column: 3 / 7;
+    }
+  }
+
+  .brief .button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--c-black);
+    mask: url(/r32.svg);
+    -webkit-mask: url(/r32.svg);
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    transition: transform 0.6s var(--f-cubic);
+  }
+
+  .brief .button .basic,
+  .brief .button .hover {
+    padding: calc(var(--g-gap) * 2) calc(var(--g-gap) * 4);
+    font-size: var(--m);
+    position: relative;
+    transition: transform 0.6s var(--f-cubic);
+  }
+
+  .brief .button .basic {
+    color: var(--c-white);
+  }
+
+  .brief .button .hover {
+    color: var(--c-black);
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translateY(100%);
+  }
+
+  @media (min-width: 1024px) {
+    .brief .button:hover .basic {
+      transform: translateY(-100%);
+    }
+
+    .brief .button:hover .hover {
+      transform: translateY(0);
+    }
+
+    .brief .button:hover::before {
+      transform: translateY(-100%);
+    }
+  }
+</style>

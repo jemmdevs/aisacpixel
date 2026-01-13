@@ -1,0 +1,227 @@
+---
+// c-liquid - "Design is..." section with large typography
+interface Props {
+  words?: string[];
+}
+
+const { words = ["Liquid", "Fluid", "Dynamic", "Alive", "Magic"] } = Astro.props;
+---
+
+<section class="c-liquid -t-p">
+  <div class="-w">
+    <div class="design-is">
+      <h2 class="-lrg">Design</h2>
+      <div class="list">
+        {words.map((word) => (
+          <span class="word">{word}</span>
+        ))}
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <!-- Media 1 -->
+      <div class="media-1">
+        <div class="video-wrap">
+          <div class="video-placeholder"></div>
+        </div>
+      </div>
+
+      <!-- Text content -->
+      <div class="text-block">
+        <p class="-m">
+          We believe design is not just aesthetics—it's a living, breathing entity that shapes experiences, 
+          evokes emotions, and transforms the ordinary into the extraordinary.
+        </p>
+      </div>
+
+      <!-- Media 2 -->
+      <div class="media-2">
+        <div class="video-wrap">
+          <div class="video-placeholder"></div>
+        </div>
+      </div>
+
+      <!-- Media 3 -->
+      <div class="media-3">
+        <div class="video-wrap">
+          <div class="video-placeholder"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="is-word">
+      <h2 class="-lrg">is</h2>
+    </div>
+  </div>
+</section>
+
+<style>
+  .c-liquid {
+    background-color: var(--c-black);
+    color: var(--c-white);
+    padding: calc(var(--g-gap) * 16) 0;
+    overflow: hidden;
+  }
+
+  .c-liquid .-w {
+    display: grid;
+    grid-template-columns: repeat(var(--g-columns), 1fr);
+    gap: var(--g-gap);
+    row-gap: calc(var(--g-gap) * 8);
+  }
+
+  /* ========================================
+     DESIGN IS
+     ======================================== */
+  .design-is {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--g-gap) * 4);
+  }
+
+  @media (min-width: 1024px) {
+    .design-is {
+      grid-column: 1 / 8;
+      flex-direction: row;
+      align-items: baseline;
+    }
+  }
+
+  .design-is h2 {
+    color: var(--c-white);
+    white-space: nowrap;
+  }
+
+  .design-is .list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--g-gap) * 2);
+  }
+
+  .design-is .word {
+    color: var(--c-grey-dark);
+    font-size: var(--h4);
+    cursor: default;
+    transition: color 0.3s var(--f-cubic);
+  }
+
+  .design-is .word:hover {
+    color: var(--c-berry);
+  }
+
+  /* ========================================
+     IS WORD
+     ======================================== */
+  .is-word {
+    grid-column: 1 / -1;
+    text-align: right;
+  }
+
+  @media (min-width: 1024px) {
+    .is-word {
+      grid-column: 10 / 15;
+    }
+  }
+
+  .is-word h2 {
+    color: var(--c-grey-dark);
+  }
+
+  /* ========================================
+     CONTENT GRID
+     ======================================== */
+  .content-grid {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(var(--g-columns), 1fr);
+    gap: var(--g-gap);
+    row-gap: calc(var(--g-gap) * 4);
+  }
+
+  .media-1,
+  .media-2,
+  .media-3 {
+    aspect-ratio: 4 / 3;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .media-1 {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 1024px) {
+    .media-1 {
+      grid-column: 1 / 6;
+      aspect-ratio: 1 / 1;
+    }
+  }
+
+  .media-2 {
+    grid-column: 1 / 4;
+  }
+
+  @media (min-width: 1024px) {
+    .media-2 {
+      grid-column: 6 / 10;
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  .media-3 {
+    grid-column: 4 / -1;
+  }
+
+  @media (min-width: 1024px) {
+    .media-3 {
+      grid-column: 10 / 14;
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+  .text-block {
+    grid-column: 1 / -1;
+    align-self: center;
+  }
+
+  @media (min-width: 1024px) {
+    .text-block {
+      grid-column: 6 / 10;
+      grid-row: 1;
+    }
+  }
+
+  .text-block p {
+    color: var(--c-grey);
+    margin: 0;
+    max-width: 35ch;
+  }
+
+  /* Video placeholders */
+  .c-liquid .video-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      45deg,
+      var(--c-grey-dark) 0%,
+      rgba(var(--c-purple-rgb), 0.3) 50%,
+      var(--c-grey-dark) 100%
+    );
+    background-size: 200% 200%;
+    animation: liquidGradient 8s ease infinite;
+  }
+
+  .media-2 .video-placeholder {
+    animation-delay: -2s;
+  }
+
+  .media-3 .video-placeholder {
+    animation-delay: -4s;
+  }
+
+  @keyframes liquidGradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+</style>

@@ -1,0 +1,549 @@
+/* ========================================
+   FONTS - Inter from Google Fonts
+   ======================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* Tailwind Base Layer */
+@import "tailwindcss" layer(base);
+
+/* ========================================
+   CSS CUSTOM PROPERTIES
+   ======================================== */
+:root {
+  /* Colors */
+  --c-white: #fff;
+  --c-white-rgb: 255, 255, 255;
+  --c-black: #101214;
+  --c-black-rgb: 16, 18, 20;
+  --c-berry: #c8c2cf;
+  --c-berry-rgb: 200, 194, 207;
+  --c-purple: #a399a8;
+  --c-purple-rgb: 163, 153, 168;
+  --c-grey: #e6dfe4;
+  --c-grey-rgb: 230, 223, 228;
+  --c-grey-dark: #544d56;
+  --c-grey-dark-rgb: 84, 77, 86;
+  --c-yellow: #f4ff1e;
+  --c-red: #f45524;
+
+  /* Easing functions */
+  --f-cubic: cubic-bezier(0.22, 0.31, 0, 1);
+  --f-cubic-in: cubic-bezier(0.69, 0, 0, 1);
+  --f-fast: cubic-bezier(0, 0.81, 0.35, 1);
+  --f-smooth: cubic-bezier(0.5, 0, 0.3, 1);
+  --f-smooth-alt: cubic-bezier(0.6, 0, 0.05, 1);
+
+  /* Typography */
+  --font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --font-mono: "Inter", monospace;
+  
+  /* Type scale */
+  --type-step: 1.333;
+  --body-font-size: 1rem;
+  --body-line-height: 1.2;
+  --p: 1rem;
+  --m: calc(var(--p) / var(--type-step));
+  --mm: calc(var(--m) / var(--type-step));
+  --h6: calc(var(--p) * var(--type-step));
+  --h5: calc(var(--h6) * var(--type-step));
+  --h4: calc(var(--h5) * var(--type-step));
+  --h3: calc(var(--h4) * var(--type-step));
+  --h2: calc(var(--h3) * var(--type-step));
+  --h1: calc(var(--h2) * var(--type-step));
+  --large: clamp(var(--p), calc(var(--h1) * var(--type-step) * var(--type-step)), 9.3vw);
+  --ls-intensity: -2;
+
+  /* Grid system */
+  --g-columns: 6;
+  --columns: 6;
+  --g-gap: 0.2rem;
+  --g-margin: calc(var(--g-gap) * 2);
+
+  /* Viewport */
+  --vh: 1vh;
+  --vw: 1vw;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --g-columns: 14;
+    --columns: 14;
+    --g-margin: calc(var(--g-gap) * 4);
+  }
+}
+
+/* ========================================
+   LENIS SMOOTH SCROLL STYLES
+   ======================================== */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  text-size-adjust: none;
+  background-color: var(--c-black);
+  color: var(--c-black);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: var(--body-line-height);
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1600px) {
+  html {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 1920px) {
+  html {
+    font-size: 24px;
+  }
+}
+
+@media (min-width: 2560px) {
+  html {
+    font-size: 28px;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font);
+  font-weight: 400;
+  line-height: var(--body-line-height);
+  margin: 0;
+}
+
+.-h1, h1 {
+  font-size: var(--h1);
+  letter-spacing: calc(var(--h1) / 100 * var(--ls-intensity));
+  line-height: 0.857;
+}
+
+.-h2, h2 {
+  font-size: var(--h2);
+  letter-spacing: calc(var(--h2) / 100 * var(--ls-intensity));
+  line-height: 0.952;
+}
+
+.-h3, h3 {
+  font-size: var(--h3);
+  letter-spacing: calc(var(--h3) / 100 * var(--ls-intensity));
+  line-height: 1;
+}
+
+.-h4, h4 {
+  font-size: var(--h4);
+  letter-spacing: calc(var(--h4) / 100 * var(--ls-intensity));
+  line-height: 1;
+}
+
+.-h5, h5 {
+  font-size: var(--h5);
+  letter-spacing: calc(var(--h5) / 100 * var(--ls-intensity));
+  line-height: 1.1;
+}
+
+.-h6, h6 {
+  font-size: var(--h6);
+  letter-spacing: calc(var(--h6) / 100 * var(--ls-intensity));
+  line-height: 1.1;
+}
+
+.-lrg {
+  font-size: var(--large);
+  letter-spacing: calc(var(--large) / 100 * var(--ls-intensity));
+  line-height: 0.859;
+  text-transform: uppercase;
+}
+
+.-p {
+  font-family: var(--font);
+  font-size: var(--p);
+  letter-spacing: normal;
+  line-height: var(--body-line-height);
+}
+
+.-m {
+  font-size: var(--m);
+  letter-spacing: normal;
+  line-height: var(--body-line-height);
+}
+
+.-mm {
+  font-family: var(--font-mono);
+  font-size: var(--mm);
+  letter-spacing: normal;
+  line-height: var(--body-line-height);
+}
+
+.-up {
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.-tac {
+  text-align: center;
+}
+
+.-taj {
+  text-align: justify;
+  text-align-last: justify;
+  line-height: 1;
+}
+
+/* Mobile typography overrides */
+@media (max-width: 1024px) {
+  .-m-h1 { font-size: var(--h1); letter-spacing: calc(var(--h1) / 100 * var(--ls-intensity)); line-height: 0.857; }
+  .-m-h2 { font-size: var(--h2); letter-spacing: calc(var(--h2) / 100 * var(--ls-intensity)); line-height: 0.952; }
+  .-m-h3 { font-size: var(--h3); letter-spacing: calc(var(--h3) / 100 * var(--ls-intensity)); line-height: 1; }
+  .-m-h4 { font-size: var(--h4); letter-spacing: calc(var(--h4) / 100 * var(--ls-intensity)); line-height: 1; }
+  .-m-h5 { font-size: var(--h5); letter-spacing: calc(var(--h5) / 100 * var(--ls-intensity)); line-height: 1.1; }
+  .-m-h6 { font-size: var(--h6); letter-spacing: calc(var(--h6) / 100 * var(--ls-intensity)); line-height: 1.1; }
+  .-m-p { font-size: var(--p); letter-spacing: normal; line-height: var(--body-line-height); }
+  .-m-m { font-size: var(--m); letter-spacing: normal; line-height: 1; }
+  .-m-mm { font-size: var(--mm); letter-spacing: normal; line-height: 1; }
+}
+
+/* ========================================
+   LINKS
+   ======================================== */
+a {
+  color: var(--c-black);
+  text-decoration: none;
+}
+
+.-black a {
+  color: var(--c-white);
+}
+
+@media (min-width: 1024px) {
+  a, .-link, .-w-link {
+    --h-underline: 1px;
+    background: linear-gradient(0deg, var(--c-black), var(--c-black)) no-repeat 100% 100% / 0 var(--h-underline);
+    transition: background-size 0.45s var(--f-smooth);
+  }
+
+  .-black a, .-black .-link, .-black .-w-link {
+    background: linear-gradient(0deg, var(--c-white), var(--c-white)) no-repeat 100% 100% / 0 var(--h-underline);
+  }
+
+  a:hover, .-link:hover, .-lw:hover .-w-link {
+    background-position-x: left;
+    background-size: 100% var(--h-underline);
+    transition: background-size 0.45s var(--f-cubic);
+  }
+
+  a.-nl, a.-exact-active {
+    --h-underline: none;
+    background: none;
+  }
+}
+
+/* ========================================
+   LAYOUT UTILITIES
+   ======================================== */
+.-w {
+  margin: 0 var(--g-margin);
+}
+
+.page {
+  min-height: calc(var(--vh, 1vh) * 100);
+}
+
+.page.-black {
+  background-color: var(--c-black);
+  color: var(--c-white);
+}
+
+section {
+  position: relative;
+}
+
+/* ========================================
+   SVG BASE
+   ======================================== */
+svg {
+  fill: var(--c-black);
+  aspect-ratio: 1 / 1;
+  width: 100%;
+}
+
+.-black svg {
+  fill: var(--c-white);
+}
+
+/* ========================================
+   BUTTON COMPONENT
+   ======================================== */
+.button {
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  text-decoration: none;
+  background: none !important;
+}
+
+.button::before {
+  background-color: var(--c-black);
+  content: "";
+  height: 100%;
+  left: 0;
+  mask: url(/r32.svg);
+  -webkit-mask: url(/r32.svg);
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  transition: transform 0.6s var(--f-cubic);
+}
+
+.-black .button::before {
+  background-color: var(--c-grey);
+}
+
+.button .basic,
+.button .hover {
+  padding: calc(var(--g-gap) * 2) calc(var(--g-gap) * 4);
+  position: relative;
+  transition: transform 0.6s var(--f-cubic);
+}
+
+.button .basic {
+  color: var(--c-white);
+}
+
+.-black .button .basic {
+  color: var(--c-black);
+}
+
+.button .hover {
+  color: var(--c-black);
+  left: 0;
+  position: absolute;
+  top: 0;
+  transform: translateY(100%);
+}
+
+.-black .button .hover {
+  color: var(--c-white);
+}
+
+@media (min-width: 1024px) {
+  .button:hover .basic {
+    transform: translateY(-100%);
+  }
+
+  .button:hover .hover {
+    transform: translateY(0);
+  }
+
+  .button:hover::before {
+    transform: translateY(-100%);
+  }
+}
+
+/* Icon button variant */
+.button svg {
+  fill: var(--c-white);
+  height: 1.5rem;
+  margin: calc(var(--g-gap) * 2);
+  width: 1.5rem;
+}
+
+.-black .button svg {
+  fill: var(--c-black);
+}
+
+/* ========================================
+   VIDEO/MEDIA CONTAINERS
+   ======================================== */
+.video-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.video-wrap.-fit {
+  position: absolute;
+  inset: 0;
+}
+
+.video-wrap video,
+.video-wrap .video-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-placeholder {
+  background: linear-gradient(135deg, var(--c-grey-dark) 0%, var(--c-black) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-placeholder::after {
+  content: "▶";
+  color: var(--c-grey);
+  font-size: 2rem;
+  opacity: 0.5;
+}
+
+/* ========================================
+   GRID SYSTEM
+   ======================================== */
+.-gc {
+  display: grid;
+  gap: var(--g-gap);
+  grid-template-columns: repeat(var(--columns, 1), 1fr);
+  grid-template-rows: repeat(var(--rows, 1), auto);
+}
+
+/* ========================================
+   CAPTION COMPONENT
+   ======================================== */
+.-caption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.-caption svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.-caption figcaption {
+  background-color: var(--c-black);
+  border-radius: 1rem;
+  color: var(--c-berry);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: var(--mm);
+}
+
+.-black .-caption figcaption {
+  background-color: var(--c-grey-dark);
+}
+
+/* ========================================
+   HORIZONTAL LINE
+   ======================================== */
+.-hl {
+  background-color: rgba(var(--c-black-rgb), 0.1);
+  display: block;
+  height: 1px;
+  width: 100%;
+}
+
+.-black .-hl {
+  background-color: rgba(var(--c-white-rgb), 0.1);
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.9s var(--f-cubic) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s var(--f-cubic) forwards;
+}
+
+/* Staggered animation delays */
+[data-delay="1"] { animation-delay: 0.1s; }
+[data-delay="2"] { animation-delay: 0.2s; }
+[data-delay="3"] { animation-delay: 0.3s; }
+[data-delay="4"] { animation-delay: 0.4s; }
+[data-delay="5"] { animation-delay: 0.5s; }
+[data-delay="6"] { animation-delay: 0.6s; }
+
+/* ========================================
+   SCROLLBAR
+   ======================================== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--c-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--c-grey-dark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--c-purple);
+}

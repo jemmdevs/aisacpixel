@@ -1,0 +1,204 @@
+---
+// c-empower - Capabilities/Services section
+interface Props {
+  title?: string;
+  subtitle?: string;
+  caption1?: string;
+  caption2?: string;
+  caption3?: string;
+}
+
+const {
+  title = "Empower",
+  subtitle = "We transform ideas into digital experiences that resonate, engage, and inspire.",
+  caption1 = "Strategy",
+  caption2 = "Design",
+  caption3 = "Development"
+} = Astro.props;
+---
+
+<section class="c-empower -t-p">
+  <div class="-w">
+    <div class="header">
+      <h2 class="-h2 -m-h3">{title}</h2>
+      <span class="subcap -mm -up">Digital Excellence</span>
+    </div>
+
+    <div class="content">
+      <p class="subtitle -h5 -m-h6">{subtitle}</p>
+
+      <div class="capabilities">
+        <div class="cap-item">
+          <span class="number -mm">01</span>
+          <span class="label -m">{caption1}</span>
+          <p class="-mm">Research, brand positioning, and digital strategy that sets the foundation.</p>
+        </div>
+        <div class="cap-item">
+          <span class="number -mm">02</span>
+          <span class="label -m">{caption2}</span>
+          <p class="-mm">Visual design, UI/UX, motion design that captivates and converts.</p>
+        </div>
+        <div class="cap-item">
+          <span class="number -mm">03</span>
+          <span class="label -m">{caption3}</span>
+          <p class="-mm">Frontend, backend, CMS integration built for performance.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="media-area">
+      <div class="video-wrap">
+        <div class="video-placeholder"></div>
+      </div>
+      <span class="caption -mm -up">Crafted with precision</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .c-empower {
+    background-color: var(--c-berry);
+    color: var(--c-black);
+    padding: calc(var(--g-gap) * 16) 0;
+  }
+
+  .c-empower .-w {
+    display: grid;
+    grid-template-columns: repeat(var(--g-columns), 1fr);
+    gap: var(--g-gap);
+    row-gap: calc(var(--g-gap) * 8);
+  }
+
+  /* ========================================
+     HEADER
+     ======================================== */
+  .header {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--g-gap) * 2);
+  }
+
+  @media (min-width: 1024px) {
+    .header {
+      grid-column: 1 / 6;
+    }
+  }
+
+  .header h2 {
+    color: var(--c-black);
+  }
+
+  .header .subcap {
+    color: var(--c-grey-dark);
+  }
+
+  /* ========================================
+     CONTENT
+     ======================================== */
+  .content {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--g-gap) * 8);
+  }
+
+  @media (min-width: 1024px) {
+    .content {
+      grid-column: 6 / 14;
+    }
+  }
+
+  .subtitle {
+    color: var(--c-black);
+    margin: 0;
+    max-width: 45ch;
+  }
+
+  /* Capabilities */
+  .capabilities {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: calc(var(--g-gap) * 4);
+  }
+
+  @media (min-width: 768px) {
+    .capabilities {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .cap-item {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--g-gap) * 2);
+    padding: calc(var(--g-gap) * 4);
+    background-color: rgba(var(--c-white-rgb), 0.5);
+    border-radius: 0.5rem;
+    transition: background-color 0.3s var(--f-cubic);
+  }
+
+  .cap-item:hover {
+    background-color: rgba(var(--c-white-rgb), 0.8);
+  }
+
+  .cap-item .number {
+    color: var(--c-grey-dark);
+  }
+
+  .cap-item .label {
+    color: var(--c-black);
+    font-weight: 500;
+  }
+
+  .cap-item p {
+    color: var(--c-grey-dark);
+    margin: 0;
+  }
+
+  /* ========================================
+     MEDIA AREA
+     ======================================== */
+  .media-area {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--g-gap) * 2);
+  }
+
+  @media (min-width: 1024px) {
+    .media-area {
+      grid-column: 1 / 10;
+    }
+  }
+
+  .media-area .video-wrap {
+    aspect-ratio: 21 / 9;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .media-area .caption {
+    color: var(--c-grey-dark);
+    align-self: flex-end;
+  }
+
+  /* Video placeholder */
+  .c-empower .video-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      var(--c-grey-dark) 0%,
+      var(--c-purple) 50%,
+      var(--c-grey-dark) 100%
+    );
+    background-size: 200% 200%;
+    animation: empowerGradient 10s ease infinite;
+  }
+
+  @keyframes empowerGradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+</style>

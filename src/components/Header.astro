@@ -1,0 +1,252 @@
+---
+// Header component - Exact replica of fiddle.digital header
+// Uses r32.svg mask for rounded corners
+---
+
+<header class="header">
+  <div class="header-wrapper">
+    <!-- Logo Section (Left - 6 columns) -->
+    <div class="logo-section">
+      <div class="logo-wrap">
+        <span class="bg"></span>
+        <a href="/" class="logo-link" aria-label="Home">
+          <span class="logo-text">
+            <span class="brand-name">AISAC.Pixel</span>
+            <span class="sub-text">フィドル</span>
+          </span>
+          <span class="agency-label">DESIGN AGENCY</span>
+          <svg class="logo-icon" viewBox="0 0 96 76">
+            <use href="#logo-96x76" fill="currentColor"></use>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Navigation Section (Right - 8 columns) -->
+    <div class="nav-section">
+      <div class="nav-wrap">
+        <span class="bg"></span>
+        <nav>
+          <a href="/work" class="nav-link">Work<label>(17)</label></a>
+          <a href="/about" class="nav-link">About</a>
+          <a href="/connect" class="nav-link">Let's talk<label>+</label></a>
+          <span class="sep"></span>
+          <a href="#" target="_blank" class="nav-link external">StringTune<label>↗</label></a>
+          <a href="#" target="_blank" class="nav-link external">Exp.<label>↗</label></a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* ========================================
+     HEADER BASE
+     ======================================== */
+  .header {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: var(--g-gap);
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .header-wrapper {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--g-gap);
+    margin: 0 var(--g-margin);
+    align-items: start; /* Align navbar to TOP of header */
+  }
+
+  @media (min-width: 1024px) {
+    .header-wrapper {
+      grid-template-columns: repeat(14, 1fr);
+    }
+  }
+
+  /* ========================================
+     LOGO SECTION - The BIG header box
+     Uses r32.svg mask (larger radius)
+     ======================================== */
+  .logo-section {
+    grid-column: 1 / -1;
+    pointer-events: all;
+  }
+
+  @media (min-width: 1024px) {
+    .logo-section {
+      grid-column: 1 / 7;
+    }
+  }
+
+  /* The main logo container with SVG mask */
+  .logo-wrap {
+    position: relative;
+    width: 100%;
+    /* 
+     * KEY: Using r32.svg mask for rounded corners
+     * The mask creates the "squircle" shape
+     */
+    mask-image: url(/r32.svg);
+    -webkit-mask-image: url(/r32.svg);
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+  }
+
+  /* Background layer inside the masked container */
+  .logo-wrap .bg {
+    position: absolute;
+    inset: 0;
+    background-color: var(--c-black);
+    /* Double mask for perfect edges */
+    mask-image: url(/r32.svg);
+    -webkit-mask-image: url(/r32.svg);
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+  }
+
+  /* The logo link - creates the height with padding */
+  .logo-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    /* 
+     * KEY: The padding creates the tall header
+     * calc(var(--g-gap) * 2) top and bottom = ~32px padding
+     */
+    padding: calc(var(--g-gap) * 2);
+    background: none !important;
+  }
+
+  /* Logo text container */
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    margin-left: calc(var(--g-gap) * 2);
+  }
+
+  .brand-name {
+    color: var(--c-white);
+    font-size: var(--h5);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .sub-text {
+    color: var(--c-grey);
+    font-size: var(--mm);
+    margin-top: 0.15em;
+  }
+
+  /* Agency label - center text */
+  .agency-label {
+    color: var(--c-grey);
+    font-size: var(--mm);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  /* Hide agency label on mobile */
+  @media (max-width: 1023px) {
+    .agency-label {
+      display: none;
+    }
+  }
+
+  /* Logo icon - the circles */
+  .logo-icon {
+    color: var(--c-grey);
+    width: 4.8rem;
+    height: auto;
+    aspect-ratio: 96 / 76;
+    margin-right: calc(var(--g-gap) * 2);
+  }
+
+
+  /* ========================================
+     NAVIGATION SECTION - The smaller nav bar
+     Uses r16.svg mask (smaller radius)
+     ======================================== */
+  .nav-section {
+    display: none;
+    pointer-events: all;
+  }
+
+  @media (min-width: 1024px) {
+    .nav-section {
+      display: block;
+      grid-column: 7 / 15;
+    }
+  }
+
+  /* Nav container with SVG mask */
+  .nav-wrap {
+    position: relative;
+    height: 2rem;
+    /* 
+     * KEY: Using r16.svg mask (smaller radius than header)
+     */
+    mask-image: url(/r16.svg);
+    -webkit-mask-image: url(/r16.svg);
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+  }
+
+  .nav-wrap .bg {
+    position: absolute;
+    inset: 0;
+    background-color: var(--c-black);
+    mask-image: url(/r16.svg);
+    -webkit-mask-image: url(/r16.svg);
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+  }
+
+  .nav-wrap nav {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+    padding: 0 calc(var(--g-gap) * 2);
+  }
+
+  .nav-link {
+    color: var(--c-white);
+    font-size: var(--m);
+    background: none !important;
+    display: flex;
+    align-items: center;
+    gap: 0.2em;
+    transition: opacity 0.3s var(--f-cubic);
+  }
+
+  .nav-link:hover {
+    opacity: 0.7;
+  }
+
+  .nav-link label {
+    color: var(--c-grey);
+    font-size: var(--mm);
+    cursor: pointer;
+  }
+
+  .nav-wrap .sep {
+    width: 1px;
+    height: var(--m);
+    background-color: var(--c-grey-dark);
+  }
+</style>

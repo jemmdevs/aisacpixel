@@ -1,11 +1,111 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import Welcome from '../components/sections/Welcome.astro';
+import Selected from '../components/sections/Selected.astro';
+import Liquid from '../components/sections/Liquid.astro';
+import Empower from '../components/sections/Empower.astro';
+import Trust from '../components/sections/Trust.astro';
+import Harmony from '../components/sections/Harmony.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import Talk from '../components/sections/Talk.astro';
+import Footer from '../components/sections/Footer.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Page metadata
+const pageTitle = "AISAC Pixel — Digital Design Agency";
+const pageDescription = "We provide full cycle web development and design services. An award-winning digital-first Design Agency committed to exceptional design and the highest development standards.";
+
+// Custom data for sections (you can modify these)
+const projects = [
+  {
+    title: "Project Alpha",
+    description: "A revolutionary digital platform that transforms how users interact with data visualization and analytics.",
+    url: "#",
+    isExternal: false
+  },
+  {
+    title: "Studio Nova",
+    description: "An immersive creative studio website showcasing cutting-edge design and interactive experiences.",
+    url: "#",
+    isExternal: false
+  },
+  {
+    title: "TechFlow",
+    description: "Enterprise SaaS platform with seamless user experience and powerful automation capabilities.",
+    url: "#",
+    isExternal: false
+  }
+];
+
+const clients = [
+  "Innovation Labs",
+  "Creative Studios",
+  "Tech Ventures",
+  "Design Co",
+  "Future Corp",
+  "Digital First"
+];
+
+const testimonials = [
+  {
+    quote: "The site's UX was exceptional, easy, and intuitive to navigate. The backend system also worked flawlessly. Overall, we have received a lot of compliments.",
+    name: "Daniel Reynolds",
+    position: "Executive Producer",
+    company: "Creative Studios"
+  }
+];
 ---
 
-<Layout>
-	<Welcome />
+<Layout title={pageTitle} description={pageDescription}>
+  <!-- Section 1: Welcome/Hero -->
+  <Welcome 
+    title="House of digital aesthetics"
+    subtitle1="Place where well-crafted web projects are born."
+    subtitle2="We provide end-to-end web development and design services."
+    copyright="©2017—2025"
+  />
+
+  <!-- Section 2: Selected Projects -->
+  <Selected projects={projects} />
+
+  <!-- Section 3: Liquid - Design Philosophy -->
+  <Liquid words={["Liquid", "Fluid", "Dynamic", "Alive", "Magic"]} />
+
+  <!-- Section 4: Empower - Services -->
+  <Empower 
+    title="Empower"
+    subtitle="We transform ideas into digital experiences that resonate, engage, and inspire."
+    caption1="Strategy"
+    caption2="Design"
+    caption3="Development"
+  />
+
+  <!-- Section 5: Trust - Clients -->
+  <Trust 
+    title="Trusted by"
+    subtitle="We've had the pleasure of working with innovative brands and forward-thinking companies."
+    clients={clients}
+  />
+
+  <!-- Section 6: Harmony - Years/Stats -->
+  <Harmony 
+    yearStart="20"
+    yearEnd="25"
+    caption="Harmony in the making"
+  />
+
+  <!-- Section 7: Testimonials -->
+  <Testimonials 
+    title="Gather 'round — client tales incoming."
+    caption="Stories travel – about the ideas, the flow, the small magic moments that happen while building something together."
+    testimonials={testimonials}
+  />
+
+  <!-- Section 8: Talk - CTA -->
+  <Talk 
+    title="Time to connect"
+    subtitle='Just one small action stands between us and getting acquainted. A great journey begins with the first word "hello!"'
+  />
+
+  <!-- Footer -->
+  <Footer copyright="AISAC.Pixel ©2025" />
 </Layout>
