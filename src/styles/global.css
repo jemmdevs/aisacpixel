@@ -560,22 +560,4 @@ section:not(.in-view) .video-placeholder {
   animation-play-state: paused;
 }
 
-/* ========================================
-   SCROLLBAR
-   ======================================== */
-::-webkit-scrollbar {
-  width: 8px;
-}
 
-::-webkit-scrollbar-track {
-  background: var(--c-black);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--c-grey-dark);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--c-purple);
-}
