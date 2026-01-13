@@ -13,8 +13,8 @@ interface Props {
   width?: number;
   height?: number;
   class?: string;
-  loading?: 'lazy' | 'eager';
-  fetchpriority?: 'high' | 'low' | 'auto';
+  loading?: "lazy" | "eager";
+  fetchpriority?: "high" | "low" | "auto";
 }
 
 const {
@@ -22,16 +22,16 @@ const {
   alt,
   width,
   height,
-  class: className = '',
-  loading = 'lazy',
-  fetchpriority = 'auto',
+  class: className = "",
+  loading = "lazy",
+  fetchpriority = "auto",
 } = Astro.props;
 
-// Calculate aspect ratio if dimensions provided
+// Calculate aspect ratio if dimensions provided for new aspect ratio
 const aspectRatio = width && height ? `${width} / ${height}` : undefined;
 ---
 
-<div 
+<div
   class={`optimized-image ${className}`}
   style={aspectRatio ? `aspect-ratio: ${aspectRatio};` : undefined}
 >
