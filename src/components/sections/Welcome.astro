@@ -77,8 +77,13 @@ const {
       standards.
     </p>
     <a href="/connect" class="button" aria-label="Get in touch">
-      <span class="basic"><span>Get in touch</span></span>
-      <span class="hover"><span>Get in touch</span></span>
+      <span class="bg">
+        <span class="fill"></span>
+      </span>
+      <span class="text-wrap">
+        <span class="basic">Get in touch</span>
+        <span class="hover">Get in touch</span>
+      </span>
     </a>
   </div>
 </section>
@@ -454,8 +459,14 @@ const {
     margin-top: calc(var(--g-gap) * 4);
     position: relative;
     display: inline-flex;
-    overflow: hidden;
+    align-items: center;
+    justify-content: center;
     background: none !important;
+  }
+
+  /* Override global button::before */
+  .brief .button::before {
+    display: none;
   }
 
   @media (min-width: 1024px) {
@@ -464,49 +475,81 @@ const {
     }
   }
 
-  .brief .button::before {
-    content: "";
+  /* White background layer - acts as container with overflow hidden */
+  .brief .button .bg {
     position: absolute;
     inset: 0;
-    background-color: var(--c-black);
-    mask: url(/r18.svg);
-    -webkit-mask: url(/r18.svg);
+    background-color: var(--c-white);
+    mask-image: url(/r18.svg);
+    -webkit-mask-image: url(/r18.svg);
     mask-size: 100% 100%;
     -webkit-mask-size: 100% 100%;
-    transition: transform 0.6s var(--f-cubic);
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    overflow: hidden;
   }
 
+  /* Black fill layer - slides up from bottom on hover */
+  .brief .button .fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--c-black);
+    mask-image: url(/r18.svg);
+    -webkit-mask-image: url(/r18.svg);
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    transform: translateY(100%);
+    transition: transform 0.5s var(--f-cubic);
+  }
+
+  /* Text wrapper - contains both texts, clips overflow */
+  .brief .button .text-wrap {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Base text styles for both */
   .brief .button .basic,
   .brief .button .hover {
     padding: calc(var(--g-gap) * 4) calc(var(--g-gap) * 5);
     font-size: var(--m);
-    position: relative;
-    transition: transform 0.6s var(--f-cubic);
+    transition: transform 0.5s var(--f-cubic);
   }
 
+  /* Basic text - visible initially, slides up on hover */
   .brief .button .basic {
-    color: var(--c-white);
+    color: var(--c-black);
   }
 
+  /* Hover text - hidden below, slides up on hover */
   .brief .button .hover {
-    color: var(--c-black);
+    color: var(--c-white);
     position: absolute;
     left: 0;
     top: 0;
     transform: translateY(100%);
   }
 
+  /* Hover states - desktop only */
   @media (min-width: 1024px) {
+    .brief .button:hover .fill {
+      transform: translateY(0);
+    }
+
     .brief .button:hover .basic {
       transform: translateY(-100%);
     }
 
     .brief .button:hover .hover {
       transform: translateY(0);
-    }
-
-    .brief .button:hover::before {
-      transform: translateY(-100%);
     }
   }
 </style>
