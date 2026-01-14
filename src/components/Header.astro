@@ -441,7 +441,6 @@
 
   /* ========================================
      NAVBAR - Hold state (no container)
-     Uses mix-blend-mode for chameleon effect
      ======================================== */
 
   /* When scrolling DOWN - navbar bg disappears from top */
@@ -449,36 +448,20 @@
     transform-origin: top center;
   }
 
-  .nav-section.-hold {
-    mix-blend-mode: difference;
-  }
-
-  .nav-section.-hold .nav-wrap {
-    background: transparent;
-  }
-
   .nav-section.-hold .nav-wrap .bg {
     transform: scaleY(0);
   }
 
   .nav-section.-hold .nav-link {
-    color: var(--c-white);
+    color: var(--c-black);
   }
 
   .nav-section.-hold .nav-link label {
-    color: var(--c-white);
-  }
-
-  .nav-section.-hold .nav-link .arrow-icon {
-    fill: var(--c-white);
+    color: var(--c-grey-dark);
   }
 
   .nav-section.-hold .nav-wrap .sep {
-    opacity: 0;
-  }
-
-  .nav-section.-hold .nav-link.last-main::after {
-    opacity: 0;
+    opacity: 0.3;
   }
 
   /* ========================================
