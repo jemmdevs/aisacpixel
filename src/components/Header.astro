@@ -37,13 +37,18 @@
         <nav>
           <a href="/work" class="nav-link">Work<label>(17)</label></a>
           <a href="/about" class="nav-link">About</a>
-          <a href="/connect" class="nav-link">Let's talk<label>+</label></a>
-          <span class="sep"></span>
-          <a href="#" target="_blank" class="nav-link external"
-            >StringTune<label>↗</label></a
+          <a href="/connect" class="nav-link last-main"
+            >Let's talk<label>+</label></a
           >
           <a href="#" target="_blank" class="nav-link external"
-            >Exp.<label>↗</label></a
+            >StringTune<svg class="arrow-icon" viewBox="0 0 24 24"
+              ><use href="#icon-24_blank"></use></svg
+            ></a
+          >
+          <a href="#" target="_blank" class="nav-link external"
+            >Exp.<svg class="arrow-icon" viewBox="0 0 24 24"
+              ><use href="#icon-24_blank"></use></svg
+            ></a
           >
         </nav>
       </div>
@@ -126,7 +131,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: calc(var(--g-gap) * 2);
+    padding: calc(var(--g-gap) * 2) var(--g-gap);
     background: none !important;
   }
 
@@ -146,17 +151,17 @@
   }
 
   .logo-max .sub-text {
-    color: var(--c-grey);
-    font-size: var(--mm);
+    color: #fff;
+    font-size: var(--h7);
     margin-top: 0.15em;
     transition: color 0.3s var(--f-cubic);
   }
 
   .logo-max .agency-label {
-    color: var(--c-grey);
+    color: #fff;
     font-size: var(--mm);
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.05em;
     transition: color 0.3s var(--f-cubic);
   }
 
@@ -300,28 +305,76 @@
 
   .nav-link {
     color: var(--c-white);
-    font-size: var(--m);
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 400;
     background: none !important;
     display: flex;
-    align-items: center;
-    gap: 0.2em;
-    transition:
-      color 0.3s var(--f-cubic),
-      opacity 0.3s var(--f-cubic);
-  }
-
-  .nav-link:hover {
-    opacity: 0.7;
-  }
-
-  .nav-link label {
-    color: var(--c-grey);
-    font-size: var(--mm);
-    cursor: pointer;
+    align-items: flex-start;
+    gap: 0.15em;
+    padding: 0.5rem 2rem;
     transition: color 0.3s var(--f-cubic);
   }
 
-  .nav-wrap .sep {
+  .nav-link.external {
+    font-size: 15px;
+    line-height: 18px;
+  }
+
+  .nav-link .arrow-icon {
+    width: 0.7em;
+    height: 0.7em;
+    fill: var(--c-berry);
+    margin-left: 0.2em;
+    margin-top: -0.1em;
+    transition: fill 0.3s var(--f-cubic);
+  }
+
+  .nav-link label {
+    color: var(--c-berry);
+    font-size: var(--mm);
+    cursor: pointer;
+    transition: color 0.3s var(--f-cubic);
+    line-height: 1;
+    margin-top: -0.1em;
+  }
+
+  /* Hover effect: when hovering nav, all links dim except the hovered one */
+  .nav-wrap nav:hover .nav-link {
+    color: var(--c-grey-dark);
+  }
+
+  .nav-wrap nav:hover .nav-link label {
+    color: var(--c-grey-dark);
+  }
+
+  .nav-wrap nav:hover .nav-link .arrow-icon {
+    fill: var(--c-grey-dark);
+  }
+
+  .nav-wrap nav:hover .nav-link:hover {
+    color: var(--c-berry);
+  }
+
+  .nav-wrap nav:hover .nav-link:hover label {
+    color: var(--c-berry);
+  }
+
+  .nav-wrap nav:hover .nav-link:hover .arrow-icon {
+    fill: var(--c-berry);
+  }
+
+  /* Separator as pseudo-element - doesn't affect space-around */
+  .nav-link.last-main {
+    position: relative;
+  }
+
+  .nav-link.last-main::after {
+    content: "";
+    position: absolute;
+    right: -0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
     width: 1px;
     height: var(--m);
     background-color: var(--c-grey-dark);
@@ -388,6 +441,7 @@
 
   /* ========================================
      NAVBAR - Hold state (no container)
+     Uses mix-blend-mode for chameleon effect
      ======================================== */
 
   /* When scrolling DOWN - navbar bg disappears from top */
@@ -395,20 +449,36 @@
     transform-origin: top center;
   }
 
+  .nav-section.-hold {
+    mix-blend-mode: difference;
+  }
+
+  .nav-section.-hold .nav-wrap {
+    background: transparent;
+  }
+
   .nav-section.-hold .nav-wrap .bg {
     transform: scaleY(0);
   }
 
   .nav-section.-hold .nav-link {
-    color: var(--c-black);
+    color: var(--c-white);
   }
 
   .nav-section.-hold .nav-link label {
-    color: var(--c-grey-dark);
+    color: var(--c-white);
+  }
+
+  .nav-section.-hold .nav-link .arrow-icon {
+    fill: var(--c-white);
   }
 
   .nav-section.-hold .nav-wrap .sep {
-    opacity: 0.3;
+    opacity: 0;
+  }
+
+  .nav-section.-hold .nav-link.last-main::after {
+    opacity: 0;
   }
 
   /* ========================================
