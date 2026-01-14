@@ -99,6 +99,8 @@
       z-index: 101;
       mix-blend-mode: exclusion;
       pointer-events: none;
+      background: transparent;
+      overflow: visible;
     }
   }
 
@@ -405,12 +407,20 @@
   }
 
   /* Hover effect: when hovering nav, all links dim except the hovered one */
-  .nav-blend:hover .nav-link {
-    opacity: 0.5;
+  .nav-blend:hover .nav-link,
+  .nav-blend:hover .nav-link span,
+  .nav-blend:hover .nav-link label,
+  .nav-blend:hover .nav-link .arrow-icon {
+    color: var(--c-grey-dark) !important;
+    fill: var(--c-grey-dark) !important;
   }
 
-  .nav-blend:hover .nav-link:hover {
-    opacity: 1;
+  .nav-blend:hover .nav-link:hover,
+  .nav-blend:hover .nav-link:hover span,
+  .nav-blend:hover .nav-link:hover label,
+  .nav-blend:hover .nav-link:hover .arrow-icon {
+    color: var(--c-berry) !important;
+    fill: var(--c-berry) !important;
   }
 
   /* Separator as pseudo-element - doesn't affect space-around */
@@ -510,11 +520,20 @@
     transform: scaleY(1);
   }
 
-  .nav-section.-hovered .nav-link:hover {
-    opacity: 1;
+  /* Hover opacity effects for nav-blend-layer when in -hovered state */
+  .nav-blend-layer.-hovered .nav-link,
+  .nav-blend-layer.-hovered .nav-link span,
+  .nav-blend-layer.-hovered .nav-link label,
+  .nav-blend-layer.-hovered .nav-link .arrow-icon {
+    color: var(--c-grey-dark) !important;
+    fill: var(--c-grey-dark) !important;
   }
 
-  .nav-section.-hovered .nav-link:not(:hover) {
-    opacity: 0.5;
+  .nav-blend-layer.-hovered .nav-link:hover,
+  .nav-blend-layer.-hovered .nav-link:hover span,
+  .nav-blend-layer.-hovered .nav-link:hover label,
+  .nav-blend-layer.-hovered .nav-link:hover .arrow-icon {
+    color: var(--c-berry) !important;
+    fill: var(--c-berry) !important;
   }
 </style>
