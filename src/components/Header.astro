@@ -1,8 +1,10 @@
 ---
 // Header component - Exact replica of fiddle.digital header
 // Has two logo states: logo-max (full) and logo-min (minimized)
+// Navbar uses mix-blend-mode: exclusion via a separate layer
 ---
 
+<!-- Main Header: Contains logos (original structure) and navbar background -->
 <header class="header">
   <div class="header-wrapper">
     <!-- LOGO MAX - Full header (visible initially) -->
@@ -30,35 +32,40 @@
       </a>
     </div>
 
-    <!-- Navigation Section (Right - 8 columns) -->
-    <div class="nav-section">
+    <!-- Navigation Background (no text here) -->
+    <div class="nav-section nav-bg">
       <div class="nav-wrap">
         <span class="bg"></span>
-        <nav>
-          <a href="/work" class="nav-link">Work<label>(17)</label></a>
-          <a href="/about" class="nav-link">About</a>
-          <a href="/connect" class="nav-link last-main"
-            >Let's talk<label>+</label></a
-          >
-          <a href="#" target="_blank" class="nav-link external"
-            >StringTune<svg class="arrow-icon" viewBox="0 0 24 24"
-              ><use href="#icon-24_blank"></use></svg
-            ></a
-          >
-          <a href="#" target="_blank" class="nav-link external"
-            >Exp.<svg class="arrow-icon" viewBox="0 0 24 24"
-              ><use href="#icon-24_blank"></use></svg
-            ></a
-          >
-        </nav>
       </div>
     </div>
   </div>
 </header>
 
+<!-- Navbar Blend Layer: Separate fixed layer for nav text with mix-blend-mode -->
+<nav class="nav-blend-layer">
+  <div class="nav-blend">
+    <a href="/work" class="nav-link"><span>Work</span><label>(17)</label></a>
+    <a href="/about" class="nav-link"><span>About</span></a>
+    <a href="/connect" class="nav-link last-main"
+      ><span>Let's talk</span><label>+</label></a
+    >
+    <a href="#" target="_blank" class="nav-link external"
+      ><span>StringTune</span><svg class="arrow-icon" viewBox="0 0 24 24"
+        ><use href="#icon-24_blank"></use></svg
+      ></a
+    >
+    <a href="#" target="_blank" class="nav-link external"
+      ><span>Exp.</span><svg class="arrow-icon" viewBox="0 0 24 24"
+        ><use href="#icon-24_blank"></use></svg
+      ></a
+    >
+  </div>
+</nav>
+
 <style>
   /* ========================================
      HEADER BASE
+     Single header for logos + navbar background
      ======================================== */
   .header {
     position: fixed;
@@ -67,6 +74,41 @@
     top: var(--g-gap);
     z-index: 100;
     pointer-events: none;
+  }
+
+  /* ========================================
+     NAV BLEND LAYER
+     Separate fixed element for navbar text
+     Uses mix-blend-mode: exclusion
+     ======================================== */
+  .nav-blend-layer {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .nav-blend-layer {
+      display: block;
+      position: fixed;
+      top: var(--g-gap);
+      right: var(--g-margin);
+      left: calc(
+        var(--g-margin) + (100% - var(--g-margin) * 2) / 14 * 6 + var(--g-gap) *
+          6
+      );
+      height: 2rem;
+      z-index: 101;
+      mix-blend-mode: exclusion;
+      pointer-events: none;
+    }
+  }
+
+  /* All text in blend layer must be white for exclusion to work */
+  .nav-blend-layer * {
+    color: var(--c-white) !important;
+  }
+
+  .nav-blend-layer svg {
+    fill: var(--c-white) !important;
   }
 
   .header-wrapper {
@@ -260,6 +302,7 @@
   .nav-section {
     display: none;
     pointer-events: all;
+    position: relative;
   }
 
   @media (min-width: 1024px) {
@@ -270,7 +313,8 @@
   }
 
   .nav-wrap {
-    position: relative;
+    position: absolute;
+    inset: 0;
     height: 2rem;
     mask-image: url(/r16.svg);
     -webkit-mask-image: url(/r16.svg);
@@ -278,6 +322,7 @@
     -webkit-mask-size: 100% 100%;
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
+    pointer-events: none;
   }
 
   .nav-wrap .bg {
@@ -294,13 +339,33 @@
     transition: transform 0.5s var(--f-cubic);
   }
 
-  .nav-wrap nav {
-    position: relative;
+  /* ========================================
+     NAV BLEND - Content inside blend layer
+     ======================================== */
+  .nav-blend {
     display: flex;
     align-items: center;
     justify-content: space-around;
     height: 100%;
     padding: 0 calc(var(--g-gap) * 2);
+    pointer-events: all;
+  }
+
+  .nav-blend .nav-link {
+    color: var(--c-white); /* White is required for exclusion to work */
+  }
+
+  .nav-blend .nav-link span {
+    color: var(--c-white);
+    position: relative;
+  }
+
+  .nav-blend .nav-link label {
+    color: var(--c-white);
+  }
+
+  .nav-blend .nav-link .arrow-icon {
+    fill: var(--c-white);
   }
 
   .nav-link {
@@ -340,28 +405,12 @@
   }
 
   /* Hover effect: when hovering nav, all links dim except the hovered one */
-  .nav-wrap nav:hover .nav-link {
-    color: var(--c-grey-dark);
+  .nav-blend:hover .nav-link {
+    opacity: 0.5;
   }
 
-  .nav-wrap nav:hover .nav-link label {
-    color: var(--c-grey-dark);
-  }
-
-  .nav-wrap nav:hover .nav-link .arrow-icon {
-    fill: var(--c-grey-dark);
-  }
-
-  .nav-wrap nav:hover .nav-link:hover {
-    color: var(--c-berry);
-  }
-
-  .nav-wrap nav:hover .nav-link:hover label {
-    color: var(--c-berry);
-  }
-
-  .nav-wrap nav:hover .nav-link:hover .arrow-icon {
-    fill: var(--c-berry);
+  .nav-blend:hover .nav-link:hover {
+    opacity: 1;
   }
 
   /* Separator as pseudo-element - doesn't affect space-around */
@@ -441,6 +490,7 @@
 
   /* ========================================
      NAVBAR - Hold state (no container)
+     With mix-blend-mode, colors adapt automatically
      ======================================== */
 
   /* When scrolling DOWN - navbar bg disappears from top */
@@ -452,36 +502,12 @@
     transform: scaleY(0);
   }
 
-  .nav-section.-hold .nav-link {
-    color: var(--c-black);
-  }
-
-  .nav-section.-hold .nav-link label {
-    color: var(--c-grey-dark);
-  }
-
-  .nav-section.-hold .nav-wrap .sep {
-    opacity: 0.3;
-  }
-
   /* ========================================
      NAVBAR - Hover state (container returns)
      ======================================== */
   .nav-section.-hold.-hovered .nav-wrap .bg {
     transform-origin: bottom center;
     transform: scaleY(1);
-  }
-
-  .nav-section.-hold.-hovered .nav-link {
-    color: var(--c-white);
-  }
-
-  .nav-section.-hold.-hovered .nav-link label {
-    color: var(--c-grey);
-  }
-
-  .nav-section.-hold.-hovered .nav-wrap .sep {
-    opacity: 1;
   }
 
   .nav-section.-hovered .nav-link:hover {

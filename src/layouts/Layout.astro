@@ -170,12 +170,21 @@ const {
       // SCROLL-BASED ANIMATIONS
       // ========================================
 
-      // Elements (cast to HTMLElement for TypeScript)
-      const header = document.querySelector(".header") as HTMLElement | null;
-      const logoMax = document.querySelector(".logo-max") as HTMLElement | null;
-      const logoMin = document.querySelector(".logo-min") as HTMLElement | null;
-      const navSection = document.querySelector(
+      // Elements - Now using querySelectorAll for elements that exist in both header layers
+      const headers = document.querySelectorAll(
+        ".header",
+      ) as NodeListOf<HTMLElement>;
+      const logoMaxElements = document.querySelectorAll(
+        ".logo-max",
+      ) as NodeListOf<HTMLElement>;
+      const logoMinElements = document.querySelectorAll(
+        ".logo-min",
+      ) as NodeListOf<HTMLElement>;
+      const navSections = document.querySelectorAll(
         ".nav-section",
+      ) as NodeListOf<HTMLElement>;
+      const navBlendLayer = document.querySelector(
+        ".nav-blend-layer",
       ) as HTMLElement | null;
       const welcomeSection = document.querySelector(
         ".c-welcome",
@@ -250,33 +259,33 @@ const {
         if (scrollY > SCROLL_THRESHOLD && !isScrolled) {
           isScrolled = true;
           document.documentElement.classList.add("-scrolled");
-          header?.classList.add("-hold");
+          headers.forEach((h) => h.classList.add("-hold"));
 
           // Scrolling DOWN - add -hiding for top-origin animation
-          logoMax?.classList.add("-hiding");
-          navSection?.classList.add("-hiding");
+          logoMaxElements.forEach((el) => el.classList.add("-hiding"));
+          navSections.forEach((el) => el.classList.add("-hiding"));
 
           // Hide logo-max, show logo-min
-          logoMax?.classList.add("-hidden");
-          logoMin?.classList.add("-visible");
+          logoMaxElements.forEach((el) => el.classList.add("-hidden"));
+          logoMinElements.forEach((el) => el.classList.add("-visible"));
 
           // Navbar loses container
-          navSection?.classList.add("-hold");
+          navSections.forEach((el) => el.classList.add("-hold"));
         } else if (scrollY <= SCROLL_THRESHOLD && isScrolled) {
           isScrolled = false;
           document.documentElement.classList.remove("-scrolled");
-          header?.classList.remove("-hold");
+          headers.forEach((h) => h.classList.remove("-hold"));
 
           // Scrolling UP - remove -hiding for bottom-origin animation
-          logoMax?.classList.remove("-hiding");
-          navSection?.classList.remove("-hiding");
+          logoMaxElements.forEach((el) => el.classList.remove("-hiding"));
+          navSections.forEach((el) => el.classList.remove("-hiding"));
 
           // Show logo-max, hide logo-min
-          logoMax?.classList.remove("-hidden");
-          logoMin?.classList.remove("-visible");
+          logoMaxElements.forEach((el) => el.classList.remove("-hidden"));
+          logoMinElements.forEach((el) => el.classList.remove("-visible"));
 
           // Navbar gets container back
-          navSection?.classList.remove("-hold");
+          navSections.forEach((el) => el.classList.remove("-hold"));
         }
 
         // ========================================
@@ -360,15 +369,33 @@ const {
       // 3. NAVBAR HOVER EFFECT
       // When in -hold state, hovering navbar shows container
       // ========================================
-      if (navSection) {
+      navSections.forEach((navSection) => {
         navSection.addEventListener("mouseenter", () => {
           if (navSection.classList.contains("-hold")) {
-            navSection.classList.add("-hovered");
+            navSections.forEach((ns) => ns.classList.add("-hovered"));
+            navBlendLayer?.classList.add("-hovered");
           }
         });
 
         navSection.addEventListener("mouseleave", () => {
-          navSection.classList.remove("-hovered");
+          navSections.forEach((ns) => ns.classList.remove("-hovered"));
+          navBlendLayer?.classList.remove("-hovered");
+        });
+      });
+
+      // Also handle hover on the nav-blend-layer itself
+      if (navBlendLayer) {
+        navBlendLayer.addEventListener("mouseenter", () => {
+          const navSection = document.querySelector(".nav-section");
+          if (navSection?.classList.contains("-hold")) {
+            navSections.forEach((ns) => ns.classList.add("-hovered"));
+            navBlendLayer.classList.add("-hovered");
+          }
+        });
+
+        navBlendLayer.addEventListener("mouseleave", () => {
+          navSections.forEach((ns) => ns.classList.remove("-hovered"));
+          navBlendLayer.classList.remove("-hovered");
         });
       }
 
