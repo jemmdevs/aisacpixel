@@ -11,7 +11,7 @@ const {
   title = "House of digital aesthetics",
   subtitle1 = "Place where well-crafted web projects are born.",
   subtitle2 = "We provide end-to-end web development and design services.",
-  copyright = "©2017—2025",
+  copyright = "©2017-2025",
 } = Astro.props;
 ---
 
@@ -283,14 +283,14 @@ const {
     gap: var(--g-gap);
     margin: 0 var(--g-margin);
     margin-top: var(--h5);
-    padding-bottom: var(--g-margin);
+    padding-bottom: 0;
     align-items: baseline;
   }
 
   @media (min-width: 1024px) {
     .words {
       grid-template-columns: repeat(14, 1fr);
-      margin-top: var(--h3);
+      margin-top: var(--h4);
       padding-bottom: var(--g-gap);
     }
   }
@@ -301,6 +301,8 @@ const {
     font-weight: 400;
     line-height: 1.2;
     margin-bottom: var(--h5);
+    word-spacing: 0.01em;
+    letter-spacing: 0.005em;
   }
 
   @media (min-width: 1024px) {
@@ -327,7 +329,7 @@ const {
   }
 
   .title .location {
-    color: var(--c-grey-dark);
+    color: var(--c-black);
   }
 
   .p-1,
@@ -359,13 +361,13 @@ const {
      HORIZONTAL LINE
      ======================================== */
   .hl-wrapper {
-    margin: 0 var(--g-margin);
+    margin: -0.5rem var(--g-margin) 0;
   }
 
   .hl {
     display: block;
     height: 1px;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.8);
     width: 100%;
   }
 
@@ -389,7 +391,7 @@ const {
 
   .copy {
     font-size: var(--mm);
-    color: var(--c-grey-dark);
+    color: var(--c-black);
     font-feature-settings: "ss12";
   }
 
