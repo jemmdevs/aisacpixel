@@ -36,7 +36,7 @@
   /* Typography */
   --font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   --font-mono: "Inter", monospace;
-  
+
   /* Type scale */
   --type-step: 1.333;
   --body-font-size: 1rem;
@@ -99,7 +99,9 @@ html.lenis body {
 /* ========================================
    BASE STYLES
    ======================================== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -151,44 +153,55 @@ body {
 /* ========================================
    TYPOGRAPHY
    ======================================== */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font);
   font-weight: 400;
   line-height: var(--body-line-height);
   margin: 0;
 }
 
-.-h1, h1 {
+.-h1,
+h1 {
   font-size: var(--h1);
   letter-spacing: calc(var(--h1) / 100 * var(--ls-intensity));
   line-height: 0.857;
 }
 
-.-h2, h2 {
+.-h2,
+h2 {
   font-size: var(--h2);
   letter-spacing: calc(var(--h2) / 100 * var(--ls-intensity));
   line-height: 0.952;
 }
 
-.-h3, h3 {
+.-h3,
+h3 {
   font-size: var(--h3);
   letter-spacing: calc(var(--h3) / 100 * var(--ls-intensity));
   line-height: 1;
 }
 
-.-h4, h4 {
+.-h4,
+h4 {
   font-size: var(--h4);
   letter-spacing: calc(var(--h4) / 100 * var(--ls-intensity));
   line-height: 1;
 }
 
-.-h5, h5 {
+.-h5,
+h5 {
   font-size: var(--h5);
   letter-spacing: calc(var(--h5) / 100 * var(--ls-intensity));
   line-height: 1.1;
 }
 
-.-h6, h6 {
+.-h6,
+h6 {
   font-size: var(--h6);
   letter-spacing: calc(var(--h6) / 100 * var(--ls-intensity));
   line-height: 1.1;
@@ -238,15 +251,59 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Mobile typography overrides */
 @media (max-width: 1024px) {
-  .-m-h1 { font-size: var(--h1); letter-spacing: calc(var(--h1) / 100 * var(--ls-intensity)); line-height: 0.857; }
-  .-m-h2 { font-size: var(--h2); letter-spacing: calc(var(--h2) / 100 * var(--ls-intensity)); line-height: 0.952; }
-  .-m-h3 { font-size: var(--h3); letter-spacing: calc(var(--h3) / 100 * var(--ls-intensity)); line-height: 1; }
-  .-m-h4 { font-size: var(--h4); letter-spacing: calc(var(--h4) / 100 * var(--ls-intensity)); line-height: 1; }
-  .-m-h5 { font-size: var(--h5); letter-spacing: calc(var(--h5) / 100 * var(--ls-intensity)); line-height: 1.1; }
-  .-m-h6 { font-size: var(--h6); letter-spacing: calc(var(--h6) / 100 * var(--ls-intensity)); line-height: 1.1; }
-  .-m-p { font-size: var(--p); letter-spacing: normal; line-height: var(--body-line-height); }
-  .-m-m { font-size: var(--m); letter-spacing: normal; line-height: 1; }
-  .-m-mm { font-size: var(--mm); letter-spacing: normal; line-height: 1; }
+  .-m-h1 {
+    font-size: var(--h1);
+    letter-spacing: calc(var(--h1) / 100 * var(--ls-intensity));
+    line-height: 0.857;
+  }
+
+  .-m-h2 {
+    font-size: var(--h2);
+    letter-spacing: calc(var(--h2) / 100 * var(--ls-intensity));
+    line-height: 0.952;
+  }
+
+  .-m-h3 {
+    font-size: var(--h3);
+    letter-spacing: calc(var(--h3) / 100 * var(--ls-intensity));
+    line-height: 1;
+  }
+
+  .-m-h4 {
+    font-size: var(--h4);
+    letter-spacing: calc(var(--h4) / 100 * var(--ls-intensity));
+    line-height: 1;
+  }
+
+  .-m-h5 {
+    font-size: var(--h5);
+    letter-spacing: calc(var(--h5) / 100 * var(--ls-intensity));
+    line-height: 1.1;
+  }
+
+  .-m-h6 {
+    font-size: var(--h6);
+    letter-spacing: calc(var(--h6) / 100 * var(--ls-intensity));
+    line-height: 1.1;
+  }
+
+  .-m-p {
+    font-size: var(--p);
+    letter-spacing: normal;
+    line-height: var(--body-line-height);
+  }
+
+  .-m-m {
+    font-size: var(--m);
+    letter-spacing: normal;
+    line-height: 1;
+  }
+
+  .-m-mm {
+    font-size: var(--mm);
+    letter-spacing: normal;
+    line-height: 1;
+  }
 }
 
 /* ========================================
@@ -262,25 +319,34 @@ a {
 }
 
 @media (min-width: 1024px) {
-  a, .-link, .-w-link {
+
+  a,
+  .-link,
+  .-w-link {
     --h-underline: 1px;
     background: linear-gradient(0deg, var(--c-black), var(--c-black)) no-repeat 100% 100% / 0 var(--h-underline);
     transition: background-size 0.45s var(--f-smooth);
   }
 
-  .-black a, .-black .-link, .-black .-w-link {
+  .-black a,
+  .-black .-link,
+  .-black .-w-link {
     background: linear-gradient(0deg, var(--c-white), var(--c-white)) no-repeat 100% 100% / 0 var(--h-underline);
   }
 
-  a:hover, .-link:hover, .-lw:hover .-w-link {
+  a:hover,
+  .-link:hover,
+  .-lw:hover .-w-link {
     background-position-x: left;
     background-size: 100% var(--h-underline);
     transition: background-size 0.45s var(--f-cubic);
   }
 
-  a.-nl, a.-exact-active {
+  a.-nl,
+  a.-exact-active,
+  .glass-button {
     --h-underline: none;
-    background: none;
+    background: none !important;
   }
 }
 
@@ -501,6 +567,7 @@ svg {
     opacity: 0;
     transform: translateY(2rem);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -508,8 +575,13 @@ svg {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .animate-fade-in-up {
@@ -521,12 +593,29 @@ svg {
 }
 
 /* Staggered animation delays */
-[data-delay="1"] { animation-delay: 0.1s; }
-[data-delay="2"] { animation-delay: 0.2s; }
-[data-delay="3"] { animation-delay: 0.3s; }
-[data-delay="4"] { animation-delay: 0.4s; }
-[data-delay="5"] { animation-delay: 0.5s; }
-[data-delay="6"] { animation-delay: 0.6s; }
+[data-delay="1"] {
+  animation-delay: 0.1s;
+}
+
+[data-delay="2"] {
+  animation-delay: 0.2s;
+}
+
+[data-delay="3"] {
+  animation-delay: 0.3s;
+}
+
+[data-delay="4"] {
+  animation-delay: 0.4s;
+}
+
+[data-delay="5"] {
+  animation-delay: 0.5s;
+}
+
+[data-delay="6"] {
+  animation-delay: 0.6s;
+}
 
 /* ========================================
    PERFORMANCE OPTIMIZATIONS
@@ -541,6 +630,7 @@ svg {
 
 /* Pause animations when not visible (saves CPU/GPU) */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -559,5 +649,3 @@ svg {
 section:not(.in-view) .video-placeholder {
   animation-play-state: paused;
 }
-
-

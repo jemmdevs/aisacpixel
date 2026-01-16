@@ -1,6 +1,7 @@
 ---
 // c-welcome - Hero section - Exact replica of fiddle.digital
 import Button from "../Button.astro";
+import GlassButton from "../GlassButton.astro";
 
 interface Props {
   title?: string;
@@ -20,12 +21,8 @@ const {
 <section class="c-welcome">
   <!-- Visual Area: Focus Arrow + Video -->
   <div class="visual">
-    <!-- Focus Arrow (Left side) -->
-    <div class="focus-arrow">
-      <svg viewBox="0 0 384 384">
-        <use href="#focus-arrow"></use>
-      </svg>
-    </div>
+    <!-- Glass Button (Left side) -->
+    <GlassButton href="#brief" label="Try Aisac" class="scroll-button" />
 
     <!-- Media/Video (Right side) -->
     <div class="media-wrap">
@@ -118,26 +115,19 @@ const {
     }
   }
 
-  /* Focus Arrow */
-  .focus-arrow {
-    display: none;
+  /* Scroll Button positioning (uses GlassButton component) */
+  :global(.scroll-button) {
+    display: none !important;
   }
 
   @media (min-width: 1024px) {
-    .focus-arrow {
-      display: flex;
+    :global(.scroll-button) {
+      display: inline-flex !important;
       grid-column: 1 / 4;
-      align-items: flex-end;
-      justify-content: flex-start;
-      padding-bottom: 0;
-    }
-
-    .focus-arrow svg {
-      fill: var(--c-black);
-      width: 100%;
-      max-width: 16rem;
-      padding: 0.1rem;
-      transform: translateY(3rem);
+      align-self: flex-end;
+      justify-self: flex-start;
+      transform: translateY(-1rem);
+      margin-left: 4rem;
     }
   }
 
