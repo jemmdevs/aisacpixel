@@ -15,11 +15,13 @@ const { href = "#", label, class: className = "" } = Astro.props;
 
 <style>
     .glass-button {
-        /* Configuración base */
+        /* Configuración */
         --glass-radius: 9999px;
-
-        /* 1. COLOR EXACTO DEL ORIGINAL: Gris azulado muy transparente */
         --glass-bg: hsla(240, 8%, 68%, 0.082);
+
+        /* Variables dinámicas (JS) */
+        --x: 50%;
+        --y: 50%;
 
         position: relative;
         display: inline-flex;
@@ -27,14 +29,14 @@ const { href = "#", label, class: className = "" } = Astro.props;
         justify-content: center;
         text-decoration: none;
         cursor: pointer;
-        padding: 0.15rem 2.4rem;
+        padding: 0.15rem 2.4rem; /* Padding original */
 
         /* GPU acceleration */
         transform: translateZ(0);
         will-change: auto;
     }
 
-    /* --- 1. EL TEXTO --- */
+    /* 1. EL TEXTO */
     .glass-button-label {
         position: relative;
         z-index: 10;
@@ -46,42 +48,97 @@ const { href = "#", label, class: className = "" } = Astro.props;
         pointer-events: none;
     }
 
-    /* --- 2. LA CÁPSULA (Estilo Visual Actualizado) --- */
+    /* 2. EL CRISTAL (Cuerpo) */
     .glass-button-inner {
         position: absolute;
         inset: 0;
         border-radius: var(--glass-radius);
         background-color: var(--glass-bg);
 
-        /* 2. EL FILTRO: Esto es clave. Saturate 200% hace que el fondo 'vibre' */
         backdrop-filter: blur(0.4rem) saturate(200%);
         -webkit-backdrop-filter: blur(0.4rem) saturate(200%);
 
-        /* 3. LA SOMBRA INTERNA:
-           El original usa sombra OSCURA (rgba 16,18,20), no blanca.
-           Esto le da volumen y densidad al cristal. */
+        /* SOMBRA SUTIL: He bajado la opacidad de 0.4 a 0.25 para que no sea tan "negra" */
         box-shadow:
-            inset 0 0 0.4rem 0.2rem rgba(16, 18, 20, 0.4),
-            /* Sombra interna densa */ 0 0.8rem 0.8rem rgba(84, 77, 86, 0.05); /* Sombra caída suave */
+            inset 0 0 0.4rem 0.2rem rgba(16, 18, 20, 0.25),
+            0 0.8rem 0.8rem rgba(84, 77, 86, 0.05);
 
-        /* Tu animación original de entrada */
+        /* Tu animación de entrada */
         animation: jelly-shrink 0.6s ease forwards;
     }
 
-    /* --- EFECTO HOVER (Manteniendo tu animación) --- */
+    /* HOVER: Animación de expansión */
     .glass-button:hover .glass-button-inner {
         animation: smooth-expand 0.4s ease forwards;
-
-        /* Ajustamos la sombra del hover para que coincida con el estilo oscuro */
+        /* Al expandirse, la sombra se hace aún más sutil */
         box-shadow:
-            inset 0 0 0.4rem 0.2rem rgba(16, 18, 20, 0.2),
-            /* Se aclara un poco al expandirse */ 0 0.8rem 0.8rem
-                rgba(84, 77, 86, 0.1);
+            inset 0 0 0.4rem 0.2rem rgba(16, 18, 20, 0.15),
+            0 0.8rem 0.8rem rgba(84, 77, 86, 0.1);
     }
 
-    /* --- TUS ANIMACIONES (Sin cambios en la física) --- */
-    /* Solo he quitado los box-shadow antiguos de dentro de los keyframes para que no parpadee blanco */
+    /* --- 3. CAPA DE REPULSIÓN (Luz Inversa) --- */
+    /* Usamos ::before para la luz que se mueve al contrario */
+    .glass-button-inner::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        pointer-events: none;
 
+        /* Luz blanca muy suave que se mueve opuesta al mouse */
+        background: radial-gradient(
+            150px circle at var(--x) var(--y),
+            rgba(255, 255, 255, 0.6) 0%,
+            transparent 100%
+        );
+
+        /* Máscara de borde */
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+
+        opacity: 1; /* Siempre visible, se mueve con JS */
+        transition: opacity 0.3s;
+    }
+
+    /* --- 4. CAPA ESTÁTICA (Esquinas diagonales) --- */
+    /* Usamos ::after para el brillo fijo diagonal "Premium" */
+    .glass-button-inner::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        pointer-events: none;
+
+        /* Gradiente diagonal fijo: Solo esquinas, centro transparente */
+        background: linear-gradient(
+            -45deg,
+            rgba(255, 255, 255, 0.3) 0%,
+            /* Arriba Izq (Sutil) */ rgba(255, 255, 255, 0) 30%,
+            /* Transparente rápido */ rgba(255, 255, 255, 0) 70%,
+            /* Transparente */ rgba(255, 255, 255, 0.3) 100%
+                /* Abajo Der (Sutil) */
+        );
+
+        /* Máscara de borde */
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+    }
+
+    /* Tus Keyframes intactos */
     @keyframes smooth-expand {
         0% {
             transform: perspective(200px) scale(1, 1) rotateX(0deg)
@@ -114,34 +171,48 @@ const { href = "#", label, class: className = "" } = Astro.props;
             transform: scale(1, 1);
         }
     }
-
-    /* --- 3. EL BORDE (Fixed Style) --- */
-    .glass-button-inner::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        padding: 1px;
-        pointer-events: none;
-
-        /* 4. EL GRADIENTE ORIGINAL */
-        /* Diagonal, brillante en esquinas opuestas, transparente en el centro */
-        background: linear-gradient(
-            -45deg,
-            rgba(255, 255, 255, 0.4) 0%,
-            rgba(255, 255, 255, 0) 40%,
-            rgba(255, 255, 255, 0) 60%,
-            rgba(255, 255, 255, 0.4) 100%
-        );
-
-        /* Máscara técnica */
-        -webkit-mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-        mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-    }
 </style>
+
+<script>
+    // Lógica de "Repulsión" (El foco se mueve al lado contrario del mouse)
+    function initRepulsionSpotlight() {
+        const buttons = document.querySelectorAll(".glass-button");
+
+        buttons.forEach((btn) => {
+            const el = btn as HTMLElement;
+
+            el.addEventListener("mousemove", (e) => {
+                const rect = el.getBoundingClientRect();
+
+                // Centro del botón
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                // Posición del mouse relativa al botón
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+
+                // Calculamos la distancia desde el centro
+                const deltaX = mouseX - centerX;
+                const deltaY = mouseY - centerY;
+
+                // INVERSIÓN: Restamos el delta al centro en lugar de sumarlo.
+                // Multiplicamos por 1.5 para exagerar un poco el movimiento opuesto
+                const repulsionX = centerX - deltaX * 1.2;
+                const repulsionY = centerY - deltaY * 1.2;
+
+                el.style.setProperty("--x", `${repulsionX}px`);
+                el.style.setProperty("--y", `${repulsionY}px`);
+            });
+
+            // Al salir, devolvemos la luz al centro suavemente
+            el.addEventListener("mouseleave", () => {
+                el.style.setProperty("--x", "50%");
+                el.style.setProperty("--y", "50%");
+            });
+        });
+    }
+
+    initRepulsionSpotlight();
+    document.addEventListener("astro:page-load", initRepulsionSpotlight);
+</script>
