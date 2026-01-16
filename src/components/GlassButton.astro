@@ -19,9 +19,10 @@ const { href = "#", label, class: className = "" } = Astro.props;
         --glass-radius: 9999px;
         --glass-bg: hsla(240, 8%, 68%, 0.082);
 
-        /* Variables dinámicas (JS) */
+        /* Variables JS */
         --x: 50%;
         --y: 50%;
+        --spotlight-opacity: 0;
 
         position: relative;
         display: inline-flex;
@@ -29,14 +30,13 @@ const { href = "#", label, class: className = "" } = Astro.props;
         justify-content: center;
         text-decoration: none;
         cursor: pointer;
-        padding: 0.15rem 2.4rem; /* Padding original */
+        padding: 0.15rem 2.4rem;
 
-        /* GPU acceleration */
         transform: translateZ(0);
         will-change: auto;
     }
 
-    /* 1. EL TEXTO */
+    /* TEXTO */
     .glass-button-label {
         position: relative;
         z-index: 10;
@@ -48,7 +48,7 @@ const { href = "#", label, class: className = "" } = Astro.props;
         pointer-events: none;
     }
 
-    /* 2. EL CRISTAL (Cuerpo) */
+    /* CRISTAL (Cuerpo) */
     .glass-button-inner {
         position: absolute;
         inset: 0;
@@ -58,42 +58,39 @@ const { href = "#", label, class: className = "" } = Astro.props;
         backdrop-filter: blur(0.4rem) saturate(200%);
         -webkit-backdrop-filter: blur(0.4rem) saturate(200%);
 
-        /* SOMBRA SUTIL: He bajado la opacidad de 0.4 a 0.25 para que no sea tan "negra" */
+        /* Sombra oscura sutil (como pediste) */
         box-shadow:
-            inset 0 0 0.4rem 0.2rem rgba(16, 18, 20, 0.25),
+            inset 0 0 0.4rem 0.2rem rgba(16, 18, 20, 0.2),
             0 0.8rem 0.8rem rgba(84, 77, 86, 0.05);
 
-        /* Tu animación de entrada */
         animation: jelly-shrink 0.6s ease forwards;
     }
 
-    /* HOVER: Animación de expansión */
+    /* HOVER */
     .glass-button:hover .glass-button-inner {
         animation: smooth-expand 0.4s ease forwards;
-        /* Al expandirse, la sombra se hace aún más sutil */
         box-shadow:
-            inset 0 0 0.4rem 0.2rem rgba(16, 18, 20, 0.15),
+            inset 0 0 0.4rem 0.2rem rgba(16, 18, 20, 0.1),
             0 0.8rem 0.8rem rgba(84, 77, 86, 0.1);
     }
 
-    /* --- 3. CAPA DE REPULSIÓN (Luz Inversa) --- */
-    /* Usamos ::before para la luz que se mueve al contrario */
+    /* --- 3. BORDE REPULSIVO (Dinámico) --- */
     .glass-button-inner::before {
         content: "";
         position: absolute;
         inset: 0;
         border-radius: inherit;
-        padding: 1px;
+        padding: 0.5px; /* Más fino */
         pointer-events: none;
 
-        /* Luz blanca muy suave que se mueve opuesta al mouse */
+        /* Luz blanca suave que se mueve */
         background: radial-gradient(
-            150px circle at var(--x) var(--y),
-            rgba(255, 255, 255, 0.6) 0%,
+            160px circle at var(--x) var(--y),
+            rgba(255, 255, 255, 0.7) 0%,
             transparent 100%
         );
 
-        /* Máscara de borde */
+        /* Máscara */
         -webkit-mask:
             linear-gradient(#fff 0 0) content-box,
             linear-gradient(#fff 0 0);
@@ -103,31 +100,28 @@ const { href = "#", label, class: className = "" } = Astro.props;
         -webkit-mask-composite: xor;
         mask-composite: exclude;
 
-        opacity: 1; /* Siempre visible, se mueve con JS */
-        transition: opacity 0.3s;
+        opacity: var(--spotlight-opacity);
+        transition: opacity 0.2s ease;
     }
 
-    /* --- 4. CAPA ESTÁTICA (Esquinas diagonales) --- */
-    /* Usamos ::after para el brillo fijo diagonal "Premium" */
+    /* --- 4. BORDE ESTÁTICO (Fijo) --- */
     .glass-button-inner::after {
         content: "";
         position: absolute;
         inset: 0;
         border-radius: inherit;
-        padding: 1px;
+        padding: 0.65px; /* Más fino */
         pointer-events: none;
 
-        /* Gradiente diagonal fijo: Solo esquinas, centro transparente */
+        /* Gradiente diagonal fijo sutil */
         background: linear-gradient(
             -45deg,
             rgba(255, 255, 255, 0.3) 0%,
-            /* Arriba Izq (Sutil) */ rgba(255, 255, 255, 0) 30%,
-            /* Transparente rápido */ rgba(255, 255, 255, 0) 70%,
-            /* Transparente */ rgba(255, 255, 255, 0.3) 100%
-                /* Abajo Der (Sutil) */
+            rgba(255, 255, 255, 0) 40%,
+            rgba(255, 255, 255, 0) 60%,
+            rgba(255, 255, 255, 0.3) 100%
         );
 
-        /* Máscara de borde */
         -webkit-mask:
             linear-gradient(#fff 0 0) content-box,
             linear-gradient(#fff 0 0);
@@ -138,7 +132,7 @@ const { href = "#", label, class: className = "" } = Astro.props;
         mask-composite: exclude;
     }
 
-    /* Tus Keyframes intactos */
+    /* Animaciones */
     @keyframes smooth-expand {
         0% {
             transform: perspective(200px) scale(1, 1) rotateX(0deg)
@@ -174,41 +168,57 @@ const { href = "#", label, class: className = "" } = Astro.props;
 </style>
 
 <script>
-    // Lógica de "Repulsión" (El foco se mueve al lado contrario del mouse)
     function initRepulsionSpotlight() {
         const buttons = document.querySelectorAll(".glass-button");
 
-        buttons.forEach((btn) => {
-            const el = btn as HTMLElement;
+        // A qué distancia (en px) empieza a reaccionar el borde
+        const PROXIMITY_RADIUS = 1450;
 
-            el.addEventListener("mousemove", (e) => {
+        document.addEventListener("mousemove", (e) => {
+            buttons.forEach((btn) => {
+                const el = btn as HTMLElement;
                 const rect = el.getBoundingClientRect();
 
-                // Centro del botón
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
+                // Centros
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
 
-                // Posición del mouse relativa al botón
-                const mouseX = e.clientX - rect.left;
-                const mouseY = e.clientY - rect.top;
+                // Distancia Mouse - Centro Botón
+                const deltaX = e.clientX - centerX;
+                const deltaY = e.clientY - centerY;
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-                // Calculamos la distancia desde el centro
-                const deltaX = mouseX - centerX;
-                const deltaY = mouseY - centerY;
+                // --- LÓGICA DE REPULSIÓN ---
+                // Invertimos el delta: Si el mouse está a la izquierda (-x), la luz va a la derecha (+x)
+                // localCenter es el 50% del botón
+                const localCx = rect.width / 2;
+                const localCy = rect.height / 2;
 
-                // INVERSIÓN: Restamos el delta al centro en lugar de sumarlo.
-                // Multiplicamos por 1.5 para exagerar un poco el movimiento opuesto
-                const repulsionX = centerX - deltaX * 1.2;
-                const repulsionY = centerY - deltaY * 1.2;
+                // El factor 1.2 hace que la luz se mueva un poco más rápido que el mouse para "huir"
+                const repulsionX = localCx - deltaX * 1.2;
+                const repulsionY = localCy - deltaY * 1.2;
 
                 el.style.setProperty("--x", `${repulsionX}px`);
                 el.style.setProperty("--y", `${repulsionY}px`);
-            });
 
-            // Al salir, devolvemos la luz al centro suavemente
-            el.addEventListener("mouseleave", () => {
-                el.style.setProperty("--x", "50%");
-                el.style.setProperty("--y", "50%");
+                // --- LÓGICA DE OPACIDAD POR PROXIMIDAD ---
+                // Empezamos a contar la distancia desde el borde del botón, no desde el centro
+                const distanceToEdge = Math.max(
+                    0,
+                    distance - Math.max(rect.width, rect.height) / 2,
+                );
+
+                if (distanceToEdge < PROXIMITY_RADIUS) {
+                    // Mapear: 0 distancia = 1 opacidad / 250 distancia = 0 opacidad
+                    const opacity = 1 - distanceToEdge / PROXIMITY_RADIUS;
+                    // Curva exponencial para que aparezca suavemente
+                    el.style.setProperty(
+                        "--spotlight-opacity",
+                        `${Math.pow(opacity, 1.5)}`,
+                    );
+                } else {
+                    el.style.setProperty("--spotlight-opacity", "0");
+                }
             });
         });
     }
