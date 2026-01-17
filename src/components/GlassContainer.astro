@@ -1,0 +1,96 @@
+---
+// GlassContainer - Reusable glassmorphism container component
+// Customizable dimensions via props
+
+interface Props {
+    class?: string;
+    width?: string;
+    height?: string;
+}
+
+const { class: className = "", width, height } = Astro.props;
+
+// Build inline styles for dimensions
+const style = [
+    width ? `width: ${width}` : null,
+    height ? `height: ${height}` : null,
+]
+    .filter(Boolean)
+    .join("; ");
+---
+
+<div class:list={["glass-container", className]} style={style || undefined}>
+    <span class="glass-container-inner"></span>
+    <div class="glass-container-content">
+        <slot />
+    </div>
+</div>
+
+<style>
+    .glass-container {
+        --glass-radius: 1.5rem;
+        --glass-bg: hsla(240, 8%, 68%, 0.082);
+
+        position: relative;
+        display: block;
+
+        /* Sombras sutiles para efecto 3D */
+        box-shadow:
+            0 0.15rem 0.4rem rgba(0, 0, 0, 0.03),
+            0 0.3rem 0.8rem rgba(0, 0, 0, 0.04),
+            0 0.6rem 1.5rem rgba(0, 0, 0, 0.05);
+        border-radius: var(--glass-radius);
+    }
+
+    .glass-container-inner {
+        position: absolute;
+        inset: 0;
+        border-radius: var(--glass-radius);
+        background-color: var(--glass-bg);
+
+        backdrop-filter: blur(0.4rem) saturate(200%);
+        -webkit-backdrop-filter: blur(0.4rem) saturate(200%);
+    }
+
+    /* Borde con gradiente diagonal que respeta border-radius */
+    .glass-container-inner::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1.5px;
+        pointer-events: none;
+
+        /* Gradiente cónico: sólido en top-left y bottom-right, transparente en las otras */
+        background: conic-gradient(
+            from 135deg at 50% 50%,
+            rgba(255, 255, 255, 0.45) 0deg,
+            rgba(255, 255, 255, 0.15) 30deg,
+            rgba(255, 255, 255, 0) 60deg,
+            rgba(255, 255, 255, 0) 120deg,
+            rgba(255, 255, 255, 0.45) 180deg,
+            rgba(255, 255, 255, 0.15) 210deg,
+            rgba(255, 255, 255, 0) 240deg,
+            rgba(255, 255, 255, 0) 300deg,
+            rgba(255, 255, 255, 0.45) 360deg
+        );
+
+        /* Máscara para crear solo el borde */
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+    }
+
+    .glass-container-content {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        height: 100%;
+        padding: calc(var(--g-gap, 1rem) * 2);
+    }
+</style>

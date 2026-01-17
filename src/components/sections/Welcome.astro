@@ -2,6 +2,7 @@
 // c-welcome - Hero section for AI Research Company
 import Button from "../Button.astro";
 import GlassButton from "../GlassButton.astro";
+import GlassContainer from "../GlassContainer.astro";
 
 interface Props {
   title?: string;
@@ -63,16 +64,16 @@ const {
   <!-- Brief/CTA -->
   <div class="brief">
     <p class="brief-text">
-      The fastest AI on the market<span class="stat">(2017)</span>engineered for
-      <svg class="icon" viewBox="0 0 24 24">
-        <use href="#icon-24_aesthetics"></use>
-      </svg>
-      peak performance and unmatched efficiency in every
-      <svg class="icon" viewBox="0 0 24 24">
-        <use href="#icon-24_dev"></use>
-      </svg>
-      interaction.
+      The fastest AI on the market, engineered for peak performance and
+      unmatched efficiency in every interaction.
     </p>
+
+    <!-- Glass Container (Right side) -->
+    <GlassContainer class="brief-glass">
+      <span class="vertical-line"></span>
+      <span class="speed-label">Faster</span>
+    </GlassContainer>
+
     <Button href="/connect" label="Get in touch" class="cta-button" />
   </div>
 </section>
@@ -402,15 +403,13 @@ const {
     line-height: 1.1;
     color: var(--c-black);
     margin: 0;
-    text-indent: 33.333%;
     letter-spacing: -0.02em;
   }
 
   @media (min-width: 1024px) {
     .brief-text {
-      grid-column: 2 / 14; /* Wider area */
-      font-size: 2.25rem; /* 45px at 20px base */
-      text-indent: 46%; /* More indent for first line */
+      grid-column: 1 / 8;
+      font-size: 2.25rem;
       letter-spacing: -0.025em;
     }
   }
@@ -418,7 +417,6 @@ const {
   @media (max-width: 1024px) {
     .brief-text {
       font-size: var(--h5);
-      text-indent: 0;
     }
   }
 
@@ -442,9 +440,77 @@ const {
   /* Button positioning - use :global() to target component class */
   .brief :global(.cta-button) {
     grid-column: 1 / -1;
-    grid-row: 2;
+    grid-row: 3;
     justify-self: center;
     margin-top: calc(var(--g-gap) * 15);
     display: block;
+  }
+
+  /* Glass container positioning in brief section */
+  .brief :global(.brief-glass) {
+    display: none;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-height: 12rem;
+  }
+
+  @media (min-width: 1024px) {
+    .brief :global(.brief-glass) {
+      display: block;
+      grid-column: 8 / 11;
+      grid-row: 1;
+      aspect-ratio: 1;
+      align-self: center;
+    }
+  }
+
+  /* Vertical line inside glass container */
+  .vertical-line {
+    position: absolute;
+    left: 50%;
+    top: 5%;
+    bottom: 5%;
+    width: 1px;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.8) 15%,
+      rgba(255, 255, 255, 0.8) 85%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  /* Animated "Faster" label */
+  .speed-label {
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translateX(-50%) rotate(-90deg);
+    transform-origin: center center;
+
+    /* Badge style */
+    background-color: #e6dfe4;
+    color: #000000;
+    padding: 0.3rem 0.8rem;
+    border-radius: 0.25rem;
+
+    font-size: var(--mm, 0.75rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+
+    animation: float-vertical 4s ease-in-out infinite;
+  }
+
+  @keyframes float-vertical {
+    0%,
+    100% {
+      top: 20%;
+    }
+    50% {
+      top: 72%;
+    }
   }
 </style>
