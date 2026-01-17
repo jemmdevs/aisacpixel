@@ -23,6 +23,10 @@
   --c-grey-rgb: 230, 223, 228;
   --c-grey-dark: #544d56;
   --c-grey-dark-rgb: 84, 77, 86;
+
+  /* Page background */
+  --c-page-bg: #E6DFE4;
+
   --c-yellow: #f4ff1e;
   --c-red: #f45524;
 
@@ -111,7 +115,7 @@ html {
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
   text-size-adjust: none;
-  background-color: var(--c-black);
+  background-color: var(--c-page-bg);
   color: var(--c-black);
   font-family: var(--font);
   font-size: 16px;
