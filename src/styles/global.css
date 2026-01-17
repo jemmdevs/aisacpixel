@@ -115,7 +115,7 @@ html {
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
   text-size-adjust: none;
-  background-color: var(--c-page-bg);
+  background-color: var(--c-black);
   color: var(--c-black);
   font-family: var(--font);
   font-size: 16px;

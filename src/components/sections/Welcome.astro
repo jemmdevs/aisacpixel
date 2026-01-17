@@ -1,5 +1,5 @@
 ---
-// c-welcome - Hero section - Exact replica of fiddle.digital
+// c-welcome - Hero section for AI Research Company
 import Button from "../Button.astro";
 import GlassButton from "../GlassButton.astro";
 
@@ -11,10 +11,10 @@ interface Props {
 }
 
 const {
-  title = "House of digital aesthetics",
-  subtitle1 = "Place where well-crafted web projects are born.",
-  subtitle2 = "We provide end-to-end web development and design services.",
-  copyright = "©2017-2025",
+  title = "AISAC - Speed meets intelligence",
+  subtitle1 = "Lightning-fast AI that delivers results in milliseconds.",
+  subtitle2 = "Maximum efficiency. Minimum latency.",
+  copyright = "©2025—2026",
 } = Astro.props;
 ---
 
@@ -44,8 +44,7 @@ const {
   <!-- Words Section -->
   <div class="words">
     <h1 class="title">
-      <span class="main">{title}<sup>®</sup></span>
-      <span class="location"> – Based in Valencia, Spain</span>
+      <span class="main">{title}</span>
     </h1>
     <p class="p-1">{subtitle1}</p>
     <p class="p-2">{subtitle2}</p>
@@ -64,16 +63,15 @@ const {
   <!-- Brief/CTA -->
   <div class="brief">
     <p class="brief-text">
-      An award-winning<span class="stat">(55+)</span>digital-first Design Agency
-      committed to
+      The fastest AI on the market<span class="stat">(2017)</span>engineered for
       <svg class="icon" viewBox="0 0 24 24">
         <use href="#icon-24_aesthetics"></use>
       </svg>
-      exceptional design and the highest development
+      peak performance and unmatched efficiency in every
       <svg class="icon" viewBox="0 0 24 24">
         <use href="#icon-24_dev"></use>
       </svg>
-      standards.
+      interaction.
     </p>
     <Button href="/connect" label="Get in touch" class="cta-button" />
   </div>
