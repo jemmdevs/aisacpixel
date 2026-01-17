@@ -40,6 +40,15 @@ const style = [
             0 0.3rem 0.8rem rgba(0, 0, 0, 0.04),
             0 0.6rem 1.5rem rgba(0, 0, 0, 0.05);
         border-radius: var(--glass-radius);
+
+        /* Optimization: skip rendering when off-screen */
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 300px;
+    }
+
+    /* Pause animations when not visible (controlled by JS) */
+    .glass-container:not(.is-visible) :global(*) {
+        animation-play-state: paused !important;
     }
 
     .glass-container-inner {
@@ -94,3 +103,32 @@ const style = [
         padding: calc(var(--g-gap, 1rem) * 2);
     }
 </style>
+
+<script>
+    // Intersection Observer to pause animations when off-screen
+    function initGlassObserver() {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                    } else {
+                        entry.target.classList.remove("is-visible");
+                    }
+                });
+            },
+            {
+                rootMargin: "50px", // Pre-load slightly before appearing
+                threshold: 0.01,
+            },
+        );
+
+        document.querySelectorAll(".glass-container").forEach((el) => {
+            observer.observe(el);
+        });
+    }
+
+    // Init on load and after Astro swaps pages
+    initGlassObserver();
+    document.addEventListener("astro:page-load", initGlassObserver);
+</script>

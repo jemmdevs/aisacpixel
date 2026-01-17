@@ -438,11 +438,14 @@ const {
   }
 
   /* Button positioning - use :global() to target component class */
+  /* Button positioning - use :global() to target component class */
+  /* Button positioning - use :global() to target component class */
   .brief :global(.cta-button) {
-    grid-column: 1 / -1;
-    grid-row: 3;
-    justify-self: center;
-    margin-top: calc(var(--g-gap) * 15);
+    grid-column: 4 / 7; /* Move left (was 5 / 8) */
+    grid-row: 2;
+    justify-self: center; /* Center in this new range */
+    align-self: start;
+    margin-top: -4.5rem; /* Move higher up */
     display: block;
   }
 
