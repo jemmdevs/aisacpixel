@@ -3,6 +3,7 @@
 import Button from "../Button.astro";
 import GlassButton from "../GlassButton.astro";
 import GlassContainer from "../GlassContainer.astro";
+import OptimizedVideo from "../OptimizedVideo.astro";
 
 interface Props {
   title?: string;
@@ -72,6 +73,16 @@ const {
     <GlassContainer class="brief-glass">
       <span class="vertical-line"></span>
       <span class="speed-label">Faster</span>
+    </GlassContainer>
+
+    <!-- White Glass Container -->
+    <GlassContainer class="white-glass">
+      <span class="ultra-label">Ultra Optimized</span>
+      <OptimizedVideo
+        src="/videoslash.webm"
+        class="container-video"
+        type="video/webm"
+      />
     </GlassContainer>
 
     <Button href="/connect" label="Get in touch" class="cta-button" />
@@ -465,6 +476,69 @@ const {
       aspect-ratio: 1;
       align-self: center;
     }
+  }
+
+  /* White glass container positioning */
+  .brief :global(.white-glass) {
+    display: none;
+    grid-column: 1 / -1;
+    grid-row: 3;
+    min-height: 12rem;
+  }
+
+  @media (min-width: 1024px) {
+    .brief :global(.white-glass) {
+      display: block;
+      grid-column: 11 / 14;
+      grid-row: 1;
+      aspect-ratio: 1;
+      align-self: center;
+      margin-left: var(--g-gap); /* Separation from brief-glass */
+    }
+
+    /* Override glass background to white */
+    .brief :global(.white-glass .glass-container-inner) {
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  /* Video inside white container - target the OptimizedVideo wrapper */
+  .brief :global(.container-video) {
+    position: absolute;
+    top: 59%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 58%;
+    height: auto;
+  }
+
+  .brief :global(.container-video video) {
+    width: 100%;
+    height: auto;
+    border: none;
+    outline: none;
+    border-radius: 0;
+    object-fit: contain;
+  }
+
+  /* Hide the loading placeholder for this specific video */
+  .brief :global(.container-video .video-loading-placeholder) {
+    display: none;
+  }
+
+  /* Ultra label above video */
+  .ultra-label {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #000;
+    font-size: 23px;
+    line-height: 27px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
   }
 
   /* Vertical line inside glass container */

@@ -16,6 +16,7 @@ interface Props {
   muted?: boolean;
   playsinline?: boolean;
   preload?: "none" | "metadata" | "auto";
+  type?: "video/mp4" | "video/webm";
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   muted = true,
   playsinline = true,
   preload = "none", // Start with none for lazy loading
+  type = "video/webm", // Default to webm for better compression
 } = Astro.props;
 ---
 
@@ -40,7 +42,7 @@ const {
     playsinline={playsinline}
     preload={preload}
   >
-    <source data-src={src} type="video/mp4" />
+    <source data-src={src} type={type} />
     Your browser does not support the video tag.
   </video>
 
@@ -169,4 +171,7 @@ const {
   } else {
     initOptimizedVideos();
   }
+
+  // Re-initialize for Astro View Transitions
+  document.addEventListener("astro:page-load", initOptimizedVideos);
 </script>
