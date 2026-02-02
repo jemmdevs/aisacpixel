@@ -91,20 +91,48 @@
       );
       height: 2rem;
       z-index: 101;
-      mix-blend-mode: exclusion;
+      mix-blend-mode: normal; /* Default: Normal over red background */
       pointer-events: none;
       background: transparent;
       overflow: visible;
     }
+
+    /* Activate exclusion ONLY when scrolled (navbar hidden) */
+    :global(html.-scrolled) .nav-blend-layer {
+      mix-blend-mode: exclusion;
+    }
+
+    /* Revert to normal when hovering (navbar red bg returns) */
+    :global(html.-scrolled) .nav-blend-layer.-hovered {
+      mix-blend-mode: normal;
+    }
   }
 
-  /* All text in blend layer must be white for exclusion to work */
+  /* Text color logic: Black by default, White when exclusion is active */
   .nav-blend-layer * {
-    color: var(--c-white) !important;
+    color: var(--c-black) !important;
+    transition: color 0.3s var(--f-cubic);
   }
 
   .nav-blend-layer svg {
+    fill: var(--c-black) !important;
+    transition: fill 0.3s var(--f-cubic);
+  }
+
+  /* When scrolled (exclusion active), text must be white */
+  :global(html.-scrolled) .nav-blend-layer * {
+    color: var(--c-white) !important;
+  }
+  :global(html.-scrolled) .nav-blend-layer svg {
     fill: var(--c-white) !important;
+  }
+
+  /* When hovered (red bg returns), text back to black */
+  :global(html.-scrolled) .nav-blend-layer.-hovered * {
+    color: var(--c-black) !important;
+  }
+  :global(html.-scrolled) .nav-blend-layer.-hovered svg {
+    fill: var(--c-black) !important;
   }
 
   .header-wrapper {
@@ -153,7 +181,7 @@
   .logo-max .logo-wrap .bg {
     position: absolute;
     inset: 0;
-    background-color: var(--c-black);
+    background-color: var(--c-red);
     mask-image: url(/r32.svg);
     -webkit-mask-image: url(/r32.svg);
     mask-size: 100% 100%;
@@ -182,7 +210,7 @@
   }
 
   .logo-max .brand-name {
-    color: var(--c-white);
+    color: var(--c-black);
     font-size: var(--h5);
     font-weight: 400;
     letter-spacing: -0.02em;
@@ -190,7 +218,7 @@
   }
 
   .logo-max .sub-text {
-    color: #fff;
+    color: #000;
     font-size: var(--h7);
     margin-top: 0.15em;
     transition: color 0.3s var(--f-cubic);
@@ -201,7 +229,7 @@
     left: 55%;
     top: 50%;
     transform: translate(-50%, -50%);
-    color: #fff;
+    color: #000;
     font-size: var(--mm);
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -223,7 +251,6 @@
     height: auto;
     aspect-ratio: 800 / 533;
     object-fit: contain;
-    filter: invert(1);
   }
 
   /* ========================================
@@ -333,7 +360,7 @@
   .nav-wrap .bg {
     position: absolute;
     inset: 0;
-    background-color: var(--c-black);
+    background-color: var(--c-red);
     mask-image: url(/r16.svg);
     -webkit-mask-image: url(/r16.svg);
     mask-size: 100% 100%;
@@ -414,16 +441,16 @@
   .nav-blend:hover .nav-link span,
   .nav-blend:hover .nav-link label,
   .nav-blend:hover .nav-link .arrow-icon {
-    color: var(--c-grey-dark) !important;
-    fill: var(--c-grey-dark) !important;
+    color: rgba(0, 0, 0, 0.5) !important;
+    fill: rgba(0, 0, 0, 0.5) !important;
   }
 
   .nav-blend:hover .nav-link:hover,
   .nav-blend:hover .nav-link:hover span,
   .nav-blend:hover .nav-link:hover label,
   .nav-blend:hover .nav-link:hover .arrow-icon {
-    color: var(--c-berry) !important;
-    fill: var(--c-berry) !important;
+    color: var(--c-black) !important;
+    fill: var(--c-black) !important;
   }
 
   /* Separator as pseudo-element - doesn't affect space-around */
@@ -439,7 +466,7 @@
     transform: translateY(-50%);
     width: 1px;
     height: var(--m);
-    background-color: var(--c-grey-dark);
+    background-color: currentColor;
     transition: opacity 0.3s var(--f-cubic);
   }
 
@@ -528,15 +555,15 @@
   .nav-blend-layer.-hovered .nav-link span,
   .nav-blend-layer.-hovered .nav-link label,
   .nav-blend-layer.-hovered .nav-link .arrow-icon {
-    color: var(--c-grey-dark) !important;
-    fill: var(--c-grey-dark) !important;
+    color: rgba(0, 0, 0, 0.5) !important;
+    fill: rgba(0, 0, 0, 0.5) !important;
   }
 
   .nav-blend-layer.-hovered .nav-link:hover,
   .nav-blend-layer.-hovered .nav-link:hover span,
   .nav-blend-layer.-hovered .nav-link:hover label,
   .nav-blend-layer.-hovered .nav-link:hover .arrow-icon {
-    color: var(--c-berry) !important;
-    fill: var(--c-berry) !important;
+    color: var(--c-black) !important;
+    fill: var(--c-black) !important;
   }
 </style>

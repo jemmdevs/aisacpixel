@@ -54,11 +54,13 @@ const { href, label, ariaLabel = label, class: className = "" } = Astro.props;
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: var(--c-black);
+        background-color: var(--c-red);
         mask-image: url(/r18.svg);
         -webkit-mask-image: url(/r18.svg);
-        mask-size: 100% 100%;
-        -webkit-mask-size: 100% 100%;
+        mask-size: 102% 102%;
+        -webkit-mask-size: 102% 102%;
+        mask-position: center;
+        -webkit-mask-position: center;
         mask-repeat: no-repeat;
         -webkit-mask-repeat: no-repeat;
         transform: translateY(100%);
@@ -89,7 +91,7 @@ const { href, label, ariaLabel = label, class: className = "" } = Astro.props;
 
     /* Hover text - hidden below */
     .btn .hover {
-        color: var(--c-berry);
+        color: var(--c-black);
         position: absolute;
         left: 0;
         top: 0;

@@ -28,7 +28,7 @@
   --c-page-bg: #E6DFE4;
 
   --c-yellow: #f4ff1e;
-  --c-red: #f45524;
+  --c-red: #DC0000;
 
   /* Easing functions */
   --f-cubic: cubic-bezier(0.22, 0.31, 0, 1);
@@ -314,7 +314,7 @@ h6 {
    LINKS
    ======================================== */
 a {
-  color: var(--c-black);
+  color: inherit;
   text-decoration: none;
 }
 
