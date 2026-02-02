@@ -308,14 +308,43 @@
   .logo-min .logo-link::after {
     content: "";
     display: block;
-    width: 1rem;
-    height: 1rem;
+    width: 1.3rem;
+    height: 1.3rem;
     border: 0.15rem solid transparent; /* Starts transparent */
     border-radius: 50%;
     margin-right: calc(var(--g-gap));
     transition:
       border-color 0.3s var(--f-cubic),
       transform 0.6s var(--f-cubic);
+    transform: scale(0); /* Start scaled down for animation */
+  }
+
+  /* Text color when logo-min is visible */
+  .logo-min.-visible .brand-name {
+    color: var(--c-black);
+    transition-delay: 0.2s;
+  }
+
+  /* Circle border fades in - with delay and bounce */
+  .logo-min.-visible .logo-link::after {
+    border-color: var(--c-black);
+    animation: bounceIn 0.6s var(--f-cubic) forwards;
+    animation-delay: 0.2s;
+  }
+
+  @keyframes bounceIn {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.5); /* More notable bounce */
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
 
   /* Text starts transparent */
@@ -517,10 +546,26 @@
     transition-delay: 0.2s;
   }
 
-  /* Circle border fades in - with delay */
+  /* Circle border fades in - with delay and bounce */
   .logo-min.-visible .logo-link::after {
     border-color: var(--c-black);
-    transition-delay: 0.2s;
+    animation: bounceIn 0.6s var(--f-cubic) forwards;
+    animation-delay: 0.2s;
+  }
+
+  @keyframes bounceIn {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
 
   /* When logo-min hides (scroll up) - contract from bottom to top */
