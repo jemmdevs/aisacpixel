@@ -13,13 +13,13 @@
   /* Colors */
   --c-white: #fff;
   --c-white-rgb: 255, 255, 255;
-  --c-black: #101214;
+  --c-black: #000000;
   --c-black-rgb: 16, 18, 20;
   --c-berry: #c8c2cf;
   --c-berry-rgb: 200, 194, 207;
   --c-purple: #a399a8;
   --c-purple-rgb: 163, 153, 168;
-  --c-grey: #e6dfe4;
+  --c-grey: #ffffff;
   --c-grey-rgb: 230, 223, 228;
   --c-grey-dark: #544d56;
   --c-grey-dark-rgb: 84, 77, 86;
