@@ -88,7 +88,7 @@ const today = new Date();
         background-color: var(--c-black);
         color: var(--c-white);
         padding: var(--g-margin) 0 2rem 0; /* Top G-Margin, Bottom 2rem, Sides 0 */
-        margin-top: 15vh; /* Push footer down significantly */
+        /* margin-top: 15vh; Removed to sit closer to PreFooter */
         position: relative;
         overflow: hidden;
     }
@@ -115,7 +115,7 @@ const today = new Date();
         display: flex;
         align-items: center;
         gap: 0.3rem; /* Reduced gap */
-        font-size: var(--mm);
+        font-size: 0.85rem; /* Larger text as requested (was var(--mm)) */
         text-transform: uppercase;
     }
 
@@ -223,7 +223,7 @@ const today = new Date();
         display: flex;
         justify-content: center;
         gap: 2rem;
-        margin-bottom: 8rem;
+        margin-bottom: 1rem; /* Reduced from 8rem to remove excess bottom space */
         flex-wrap: wrap;
     }
 
@@ -231,7 +231,7 @@ const today = new Date();
         color: #ffffff;
         font-size: var(--m);
         text-decoration: none;
-        opacity: 0.6;
+        opacity: 1; /* Solid white as requested */
         transition: opacity 0.3s ease;
         position: relative;
     }

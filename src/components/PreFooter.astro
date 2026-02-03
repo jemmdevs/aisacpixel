@@ -1,0 +1,29 @@
+---
+// PreFooter.astro - Mirrored "AisacPixel" text section
+---
+
+<section class="pre-footer">
+    <div class="mirror-text">Aisac&nbsp;Pixel</div>
+</section>
+
+<style>
+    .pre-footer {
+        background-color: var(--c-black);
+        padding: 8rem 0 2rem 0; /* Reduced bottom padding to bring closer to footer */
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .mirror-text {
+        font-size: 15vw;
+        font-weight: 400;
+        color: #1a1a1a; /* Dark grey, slightly lighter than BG */
+        /* text-transform: uppercase; Removed to show AisacPixel case */
+        letter-spacing: -0.02em;
+        transform: scaleX(-1); /* Mirror horizontally */
+        user-select: none;
+        white-space: nowrap;
+    }
+</style>
