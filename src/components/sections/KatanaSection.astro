@@ -1,0 +1,155 @@
+---
+import KatanaViewer from "../react/KatanaViewer";
+---
+
+<section id="katana-section" class="katana-section">
+    <div class="katana-sticky">
+        <!-- Texto izquierda: aparece con efecto humo según scroll -->
+        <div class="katana-text">
+            <p class="text-line" data-line="0">Next level<br>optimization,</p>
+            <p class="text-line" data-line="1">sharp and fast<br>as a sword.</p>
+            <p class="text-line" data-line="2">Now...</p>
+            <p class="text-line" data-line="3">Exu-kalibahhh</p>
+        </div>
+
+        <!-- Espada derecha -->
+        <div class="katana-viewer">
+            <KatanaViewer client:only="react" />
+        </div>
+    </div>
+</section>
+
+<style>
+    .katana-section {
+        width: 100%;
+        height: 300vh;
+    }
+
+    .katana-sticky {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+    }
+
+    /* ========================================
+       TEXTO — efecto humo via --reveal (0 a 1)
+       ======================================== */
+    .katana-text {
+        padding-left: calc(var(--g-margin) * 4);
+        padding-right: var(--g-margin);
+        z-index: 1;
+    }
+
+    .text-line {
+        --reveal: 0;
+        color: var(--c-white);
+        font-family: var(--font);
+        font-size: var(--h6);
+        font-weight: 400;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin: 0 0 0.7em;
+
+        /* Smoke reveal: opacity + blur + drift hacia arriba */
+        opacity: var(--reveal);
+        filter: blur(calc((1 - var(--reveal)) * 16px));
+        transform: translateY(calc((1 - var(--reveal)) * 28px));
+        will-change: filter, transform, opacity;
+    }
+
+    /* "Now..." — rojo, paso sutil hacia arriba */
+    .text-line[data-line="2"] {
+        font-size: var(--h5);
+        color: var(--c-red);
+        margin-bottom: 0.2em;
+    }
+
+    /* "Exu-kalibahhh" — el reveal final */
+    .text-line[data-line="3"] {
+        font-size: var(--h4);
+        font-weight: 600;
+        color: var(--c-white);
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+    }
+
+    /* ========================================
+       3D VIEWER
+       ======================================== */
+    .katana-viewer {
+        height: 100vh;
+        width: 100%;
+    }
+
+    /* ========================================
+       MOBILE
+       ======================================== */
+    @media (max-width: 1024px) {
+        .katana-sticky {
+            grid-template-columns: 1fr;
+            align-content: center;
+            gap: 1.5rem;
+        }
+
+        .katana-text {
+            padding: 0 var(--g-margin);
+            text-align: center;
+            order: 2;
+        }
+
+        .katana-viewer {
+            height: 45vh;
+            order: 1;
+        }
+
+        .text-line {
+            font-size: var(--h5);
+        }
+
+        .text-line[data-line="2"] {
+            font-size: var(--h4);
+        }
+
+        .text-line[data-line="3"] {
+            font-size: var(--h3);
+        }
+    }
+</style>
+
+<script>
+    const section = document.getElementById('katana-section');
+    const lines = document.querySelectorAll('.text-line');
+
+    // Punto de inicio de cada línea dentro del scroll (0 a 1)
+    const STARTS = [0.05, 0.22, 0.42, 0.60];
+    // Cada línea tarda este rango de scroll en completar el reveal
+    const DURATION = 0.28;
+
+    function update() {
+        if (!section) return;
+
+        const rect = section.getBoundingClientRect();
+        const scrollableRange = section.offsetHeight - window.innerHeight;
+
+        if (scrollableRange <= 0) {
+            requestAnimationFrame(update);
+            return;
+        }
+
+        const progress = Math.max(0, Math.min(1, -rect.top / scrollableRange));
+
+        lines.forEach((line, i) => {
+            const start = STARTS[i] ?? (i * 0.2);
+            const reveal = Math.max(0, Math.min(1, (progress - start) / DURATION));
+            (line as HTMLElement).style.setProperty('--reveal', reveal.toFixed(3));
+        });
+
+        requestAnimationFrame(update);
+    }
+
+    requestAnimationFrame(update);
+</script>
