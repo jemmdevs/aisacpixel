@@ -9,6 +9,14 @@ import KatanaViewer from "../react/KatanaViewer";
             <KatanaViewer client:only="react" />
         </div>
 
+        <!-- Textos en las 4 esquinas -->
+        <div class="corner-texts">
+            <span class="corner tl">Wide range of effects</span>
+            <span class="corner tr">Effortless initialization</span>
+            <span class="corner bl">Performance oriented</span>
+            <span class="corner br">Attribute-Based Integration</span>
+        </div>
+
         <!-- Texto centrado sobre la espada: una palabra a la vez -->
         <div class="katana-text">
             <p class="text-word" data-word="0">Concentrate</p>
@@ -79,6 +87,35 @@ import KatanaViewer from "../react/KatanaViewer";
     }
 
     /* ========================================
+       ESQUINAS
+       ======================================== */
+    .corner-texts {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        padding: var(--g-margin);
+    }
+
+    .corner {
+        color: var(--c-white);
+        font-family: var(--font);
+        font-size: var(--h5);
+        font-weight: 400;
+        margin: 0;
+        max-width: 14rem;
+        line-height: 1.1;
+    }
+
+    .corner.tl { align-self: start; justify-self: start; margin-top: 4rem; }
+    .corner.tr { align-self: start; justify-self: end;   text-align: right; margin-top: 4rem; }
+    .corner.bl { align-self: end;   justify-self: start; margin-bottom: 1.5rem; }
+    .corner.br { align-self: end;   justify-self: end;   text-align: right; margin-bottom: 1.5rem; }
+
+    /* ========================================
        MOBILE
        ======================================== */
     @media (max-width: 1024px) {
@@ -93,15 +130,14 @@ import KatanaViewer from "../react/KatanaViewer";
     const words = document.querySelectorAll('.text-word');
 
     /*
-     * Timing por palabra (valores de progress 0→1 sobre los 300vh de scroll).
+     * Timing por palabra (valores de progress 0→1 sobre los 500vh de scroll).
      * Cada palabra tiene: revealStart→revealEnd (aparece) y hideStart→hideEnd (desaparece).
-     * "Fast" es la última y no tiene hide (se queda visible).
      */
     const TIMINGS = [
         { revealStart: 0.0,  revealEnd: 0.1,  hideStart: 0.15, hideEnd: 0.25 }, // Concentrate
         { revealStart: 0.25, revealEnd: 0.35, hideStart: 0.4,  hideEnd: 0.5  }, // Sharp
         { revealStart: 0.5,  revealEnd: 0.6,  hideStart: 0.65, hideEnd: 0.75 }, // Efficient
-        { revealStart: 0.75, revealEnd: 0.85, hideStart: 0.9,  hideEnd: 1.0  }, // Fast — se desvanece al final
+        { revealStart: 0.75, revealEnd: 0.85, hideStart: 0.9,  hideEnd: 1.0  }, // Fast
     ];
 
     function clamp01(v: number) { return Math.max(0, Math.min(1, v)); }
@@ -111,11 +147,7 @@ import KatanaViewer from "../react/KatanaViewer";
 
         const rect = section.getBoundingClientRect();
         const scrollableRange = section.offsetHeight - window.innerHeight;
-
-        if (scrollableRange <= 0) {
-            requestAnimationFrame(update);
-            return;
-        }
+        if (scrollableRange <= 0) return;
 
         const progress = Math.max(0, Math.min(1, -rect.top / scrollableRange));
 
@@ -131,9 +163,25 @@ import KatanaViewer from "../react/KatanaViewer";
             (word as HTMLElement).style.setProperty('--reveal', reveal.toFixed(3));
             (word as HTMLElement).style.setProperty('--hide',   hide.toFixed(3));
         });
-
-        requestAnimationFrame(update);
     }
 
-    requestAnimationFrame(update);
+    // RAF loop que solo corre cuando la sección está en vista
+    let rafId: number | null = null;
+
+    function loop() {
+        update();
+        rafId = requestAnimationFrame(loop);
+    }
+
+    if (section) {
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                if (rafId === null) rafId = requestAnimationFrame(loop);
+            } else {
+                if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+            }
+        }, { rootMargin: '100px' });
+
+        observer.observe(section);
+    }
 </script>

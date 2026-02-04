@@ -28,57 +28,31 @@ const today = new Date();
 </footer>
 
 <script>
-    // Scroll driven animation for footer links
+    import { lenis } from '../scripts/lenis';
+
     const footer = document.getElementById("main-footer");
     const linksContainer = document.getElementById("footer-links");
 
     if (footer && linksContainer) {
-        // Initial state set in CSS to avoid FOUC, but we control via JS for scrub
-        // Actually, CSS variables are cleaner.
-
         const updateScroll = () => {
             const rect = footer.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-
-            // Calculate how much of the footer top is effectively visible/scrolled past bottom
-            // We want animation to start when footer top enters (rect.top <= viewportHeight)
-            // And finish when footer is fully visible or after some distance.
-
-            // Distance from becoming visible
-            const dist = viewportHeight - rect.top;
+            const dist = window.innerHeight - rect.top;
 
             if (dist > 0) {
-                // Animation range: 0px to 300px of scroll
-                const range = 300;
-                let progress = Math.min(1, Math.max(0, dist / range));
-
-                // Easing for elegance
-                // progress = progress * (2 - progress); // Ease out
-
-                // Apply usage
-                // Opacity 0 -> 1
-                // TranslateY -105px -> 0px (Adjusted to 105 as requested)
-
-                const translateY = -105 * (1 - progress);
-
+                const progress = Math.min(1, Math.max(0, dist / 300));
                 linksContainer.style.opacity = progress.toString();
-                linksContainer.style.transform = `translateY(${translateY}px)`;
+                linksContainer.style.transform = `translateY(${-105 * (1 - progress)}px)`;
             } else {
-                // Before view
                 linksContainer.style.opacity = "0";
-                linksContainer.style.transform = `translateY(-105px)`;
+                linksContainer.style.transform = "translateY(-105px)";
             }
         };
 
-        window.addEventListener(
-            "scroll",
-            () => {
-                requestAnimationFrame(updateScroll);
-            },
-            { passive: true },
-        );
+        // Usa el evento scroll de Lenis en lugar de window scroll
+        // (Lenis intercepta el scroll nativo y este no dispara durante smooth scroll)
+        lenis.on('scroll', updateScroll);
 
-        // Initial call
+        // Llamada inicial para el estado de carga
         updateScroll();
     }
 </script>
