@@ -4,6 +4,10 @@
  */
 import Lenis from 'lenis';
 
+// Evita que el browser restaure la posición del scroll al recargar
+history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
+
 // Initialize Lenis with optimized settings
 export const lenis = new Lenis({
     duration: 1.2,
