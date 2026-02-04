@@ -4,6 +4,7 @@ import Button from "../Button.astro";
 import SvgFrame from "../SvgFrame.astro";
 import GlassContainer from "../GlassContainer.astro";
 import OptimizedVideo from "../OptimizedVideo.astro";
+import Spinner3D from "./Spinner3D.astro";
 
 interface Props {
   title?: string;
@@ -83,11 +84,9 @@ const {
     <!-- White Glass Container -->
     <GlassContainer class="white-glass">
       <span class="ultra-label">Ultra Optimized</span>
-      <OptimizedVideo
-        src="/videoslash.webm"
-        class="container-video"
-        type="video/webm"
-      />
+      <div class="spinner-container">
+        <Spinner3D />
+      </div>
     </GlassContainer>
 
     <Button href="/connect" label="Get in touch" class="cta-button" />
@@ -499,34 +498,20 @@ const {
       margin-left: var(--g-gap); /* Separation from brief-glass */
     }
 
-    /* Override glass background to white */
+    /* Override glass background to dark grey as requested */
     .brief :global(.white-glass .glass-container-inner) {
-      background-color: var(--c-white);
+      background-color: #0e0e0f !important;
+      backdrop-filter: blur(10px);
     }
   }
 
-  /* Video inside white container - target the OptimizedVideo wrapper */
-  .brief :global(.container-video) {
+  /* Spinner positioning */
+  .spinner-container {
     position: absolute;
-    top: 59%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 58%;
-    height: auto;
-  }
-
-  .brief :global(.container-video video) {
-    width: 100%;
-    height: auto;
-    border: none;
-    outline: none;
-    border-radius: 0;
-    object-fit: contain;
-  }
-
-  /* Hide the loading placeholder for this specific video */
-  .brief :global(.container-video .video-loading-placeholder) {
-    display: none;
+    pointer-events: none;
   }
 
   /* Ultra label above video */
@@ -535,7 +520,7 @@ const {
     top: 10%;
     left: 50%;
     transform: translateX(-50%);
-    color: #000;
+    color: var(--c-red); /* Changed from #000 to red */
     font-size: 23px;
     line-height: 27px;
     font-weight: 400;
