@@ -8,8 +8,21 @@ function KatanaModel() {
     const modelRef = useRef<THREE.Group>(null);
     const sectionRef = useRef<HTMLElement | null>(null);
 
+    // Parallax: posición objetivo del cursor y posición interpolada
+    const mouseTarget = useRef({ x: 0, y: 0 });
+    const mouseCurrent = useRef({ x: 0, y: 0 });
+
     useEffect(() => {
         sectionRef.current = document.getElementById('katana-section');
+
+        const onMouseMove = (e: MouseEvent) => {
+            // Normaliza a [-1, 1] desde el centro del viewport
+            mouseTarget.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseTarget.current.y = (e.clientY / window.innerHeight) * 2 - 1;
+        };
+
+        window.addEventListener('mousemove', onMouseMove);
+        return () => window.removeEventListener('mousemove', onMouseMove);
     }, []);
 
     useFrame(() => {
@@ -22,13 +35,27 @@ function KatanaModel() {
 
         if (scrollableRange <= 0) return;
 
-        // 0 cuando el top de la sección llega al viewport top, 1 cuando sale por arriba
         const progress = Math.max(0, Math.min(1, -rect.top / scrollableRange));
 
-        // Rotación multi-eje driven por scroll
-        modelRef.current.rotation.y = progress * Math.PI * 3;                              // 1.5 rotaciones en Y
-        modelRef.current.rotation.x = Math.sin(progress * Math.PI * 2) * (Math.PI / 6);  // oscilación en X (2 ciclos, 30°)
-        modelRef.current.rotation.z = Math.sin(progress * Math.PI) * (Math.PI / 8);      // arco sutil en Z (1 ciclo, 22°)
+        // --- Rotación por scroll ---
+        const scrollRotY = progress * Math.PI * 3;
+        const scrollRotX = Math.sin(progress * Math.PI * 2) * (Math.PI / 6);
+        const scrollRotZ = Math.sin(progress * Math.PI) * (Math.PI / 8);
+
+        // --- Parallax por cursor (lerp suave) ---
+        const lerp = 0.06;
+        mouseCurrent.current.x += (mouseTarget.current.x - mouseCurrent.current.x) * lerp;
+        mouseCurrent.current.y += (mouseTarget.current.y - mouseCurrent.current.y) * lerp;
+
+        // Inverted: cursor derecha → espada rota izquierda, cursor arriba → espada rota abajo
+        const amp = Math.PI / 8; // ~22°
+        const parallaxRotY = -mouseCurrent.current.x * amp;
+        const parallaxRotX =  mouseCurrent.current.y * amp;
+
+        // --- Combina scroll + parallax ---
+        modelRef.current.rotation.y = scrollRotY + parallaxRotY;
+        modelRef.current.rotation.x = scrollRotX + parallaxRotX;
+        modelRef.current.rotation.z = scrollRotZ;
     });
 
     return (
